@@ -61,7 +61,7 @@ namespace YR.Web.Manage.VehicleManage
             {
                 DateTime dtStart = Convert.ToDateTime(startDate);
                 DateTime dtEnd = Convert.ToDateTime(endDate);
-                if (DateTime.Compare(dtEnd, dtStart) > 0)
+                if (DateTime.Compare(dtEnd, dtStart) >= 0)
                 {
                     this.DataBindGrid(true);
                     ScriptManager.RegisterStartupScript(UpdatePanel2, this.Page.GetType(), "", "publicobjcss();", true);
