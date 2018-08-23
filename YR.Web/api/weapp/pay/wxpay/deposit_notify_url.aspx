@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="deposit_notify_url.aspx.cs" Inherits="YR.Web.api.weapp.pay.wxpay.deposit_notify_url" %>

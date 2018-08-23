@@ -1,0 +1,95 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin: 0px; padding: 0px; border: 0px currentColor; border-image: none; line-height: inherit; font-family: inherit; font-size: 100%; font-style: inherit; font-variant: inherit; font-weight: inherit; vertical-align: baseline; font-size-adjust: inherit; font-stretch: inherit;}
+html {line-height: 1;}
+ol {list-style: none;}
+ul {list-style: none;}
+table {border-collapse: collapse; border-spacing: 0;}
+caption {text-align: left; font-weight: normal; vertical-align: middle;}
+th {text-align: left; font-weight: normal; vertical-align: middle;}
+td {text-align: left; font-weight: normal; vertical-align: middle;}
+q {quotes: none;}
+blockquote {quotes: none;}
+q::before {content: none;}
+q::after {content: none;}
+blockquote::before {content: none;}
+blockquote::after {content: none;}
+a img {border: currentColor; border-image: none;}
+article {display: block;}
+aside {display: block;}
+details {display: block;}
+figcaption {display: block;}
+figure {display: block;}
+footer {display: block;}
+header {display: block;}
+hgroup {display: block;}
+main {display: block;}
+menu {display: block;}
+nav {display: block;}
+section {display: block;}
+summary {display: block;}
+img {display: block;}
+input {}
+.clearfix::before {font: 0px/0 ""; display: table; content: ""; font-size-adjust: none; font-stretch: normal;}
+.clearfix::after {font: 0px/0 ""; display: table; content: ""; font-size-adjust: none; font-stretch: normal;}
+.clearfix::after {clear: both;}
+html {height: 100%;}
+body {height: 100%;}
+body {background: rgb(249, 249, 249); font: 0.62em/1.5 helvetica neue, tahoma, arial, hiragino sans gb, microsoft yahei, sans-serif; color: rgb(52, 52, 52); min-width: 320px; font-size-adjust: none; font-stretch: normal; -webkit-tap-highlight-color: transparent;
+}
+a {color: rgb(255, 255, 255); text-decoration: none;}
+[class^='down-icon-'] {background: url("download.png") no-repeat 0% 0% / 226px 155px;}
+.down-banner {width: 100%;}
+.down-main {margin: auto; padding: 10px 0px; width: 90%; overflow: hidden;}
+.down-info {margin: auto; padding: 10px 0px; width: 90%; overflow: hidden;}
+.down-main {border-bottom-color: #67B312; border-bottom-width: 1px; border-bottom-style: solid;}
+.down-left {float: left;}
+.down-icon-app {width: 113px; height: 89.5px; display: block;}
+.down-btnbox {margin-left: 130px;}
+.downbtn {background: #67B312; font: 1.2em/25px ""; border-radius: 10px; width: 100%; height: 25px; text-align: center; color: rgb(255, 255, 255); margin-bottom: 10px; display: block; position: relative; box-sizing: border-box; font-size-adjust: none; font-stretch: normal; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box;
+}
+.downbtn1 {background: #67B312; font: 1.2em/25px ""; border-radius: 10px; width: 100%; height: 25px; text-align: center; color: rgb(255, 255, 255); margin-bottom: 10px; display: block; position: relative; box-sizing: border-box; font-size-adjust: none; font-stretch: normal; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box;
+}
+.downbtn {box-shadow: 0px 4px 0px #80B312;}
+.downbtn1 {background: rgb(255, 255, 255); border: 1px solid #67B312; border-image: none; color: #67B312; margin-top: 12px;}
+.downbtn.touch {background: rgb(24, 167, 67);}
+.downbtn1.touch {background: rgb(199, 244, 213);}
+.down-keywordlist {display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;}
+.down-keywordlist li {position: relative;-webkit-box-flex: 1;-moz-box-flex: 1;-webkit-flex: 1;-ms-flex: 1;flex: 1;text-align: center;}
+.down-icon-kw1 {margin: 0px auto 10px; width: 65px; height: 65px; display: block;}
+.down-icon-kw2 {margin: 0px auto 10px; width: 65px; height: 65px; display: block;}
+.down-icon-kw3 {margin: 0px auto 10px; width: 65px; height: 65px; display: block;}
+.down-icon-kw1 {background-position: 0px -90px;}
+.down-icon-kw2 {background-position: -70px -90px;}
+.down-icon-kw3 {background-position: -140px -90px;}
+.down-keywordlist em {font: 1em/2 ""; letter-spacing: -1px; display: block; font-size-adjust: none; font-stretch: normal; -webkit-transform: scale(0.9);}
+@media screen and (min-width:480px)
+{
+.down-keywordlist em {font: 1.2em/2 ""; font-size-adjust: none; font-stretch: normal; -webkit-transform: scale(1);}
+}
+.down-tit {font: 600 1.4em/2 ""; color: #67B312; margin-bottom: 5px; font-size-adjust: none; font-stretch: normal;}
+.down-info-list {margin-bottom: 20px;}
+.down-info-list li {overflow: hidden; margin-bottom: 10px;}
+.down-info-list i {width: 31px; height: 31px; margin-top: 5px; float: left;}
+.down-icon-info1 {background-position: -120px 0px;}
+.down-icon-info2 {background-position: -120px -35px;}
+.down-icon-info5 {background-position: -196px 0px;}
+.down-icon-info3 {background-position: -160px 0px;}
+.down-icon-info4 {background-position: -160px -35px;}
+.down-info-txt {padding-bottom: 10px; margin-left: 40px; border-bottom-color: rgb(221, 221, 221); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.down-info-txt dt {font: 1.2em/2 ""; font-size-adjust: none; font-stretch: normal;}
+.down-info-txt dd {font: 400 1em/1.5 ""; color: rgb(153, 153, 153); font-size-adjust: none; font-stretch: normal; -webkit-text-size-adjust: none;
+}
+.down-footer {font: 1.1em/24px ""; left: 0px; width: 100%; height: 24px; bottom: 0px; color: rgb(255, 255, 255); position: fixed; font-size-adjust: none; font-stretch: normal; background-color: #67B312;
+}
+.down-fl {margin-left: 25px; float: left;}
+.down-fr {margin-right: 25px; float: right;}
+.popup {left: 0px; top: 0px; width: 100%; height: 100%; display: none; position: fixed; z-index: 100; background-color: rgba(0, 0, 0, 0.6);
+}
+.popup-tip {border-radius: 3px; top: 10px; width: 300px; height: 42px; right: 10px; color: rgb(3, 3, 3); line-height: 42px; text-indent: 20px; font-size: 17px; position: absolute; z-index: 101; background-color: rgb(255, 255, 255);
+}
+.popup-tip em {color: rgb(212, 0, 0);
+}
+.popup-tip::after {background: url("icon.png") no-repeat -99px -9px / auto 50px; top: 6px; width: 31px; height: 34px; right: 21px; overflow: hidden; position: absolute; content: "";
+}
+.popup.active {display: block;}
+

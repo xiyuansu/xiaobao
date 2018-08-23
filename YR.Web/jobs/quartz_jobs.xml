@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<job-scheduling-data xmlns="http://quartznet.sourceforge.net/JobSchedulingData" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	version="2.0">
+
+  <processing-directives>
+    <overwrite-existing-data>true</overwrite-existing-data>
+  </processing-directives>
+
+  <schedule>
+
+	  <job>
+		  <name>OrderPayQuery_Job</name>
+		  <group>OrdersGroup</group>
+		  <description>支付订单检测</description>
+		  <job-type>YR.Web.jobs.OrderPayQuery,YR.Web</job-type>
+		  <durable>true</durable>
+		  <recover>false</recover>
+	  </job>
+
+	  <trigger>
+		  <simple>
+			  <name>OrderPayQuery_Trigger</name>
+			  <group>OrdersTrigger</group>
+			  <description>支付订单检测计划</description>
+			  <job-name>OrderPayQuery_Job</job-name>
+			  <job-group>OrdersGroup</job-group>
+			  <misfire-instruction>SmartPolicy</misfire-instruction>
+			  <repeat-count>-1</repeat-count>
+			  <repeat-interval>3600000</repeat-interval>
+		  </simple>
+	  </trigger>
+
+	  <job>
+		  <name>CancelOrders_Job</name>
+		  <group>OrdersGroup</group>
+		  <description>取消超时订单</description>
+		  <job-type>YR.Web.jobs.CancelOrders,YR.Web</job-type>
+		  <durable>true</durable>
+		  <recover>false</recover>
+		  <job-data-map>
+			  <entry>
+				  <key>minutes</key>
+				  <value>10</value>
+			  </entry>
+		  </job-data-map>
+	  </job>
+
+	  <trigger>
+		  <simple>
+			  <name>CancelOrders_Trigger</name>
+			  <group>OrdersTrigger</group>
+			  <description>取消超时订单计划</description>
+			  <job-name>CancelOrders_Job</job-name>
+			  <job-group>OrdersGroup</job-group>
+			  <misfire-instruction>SmartPolicy</misfire-instruction>
+			  <repeat-count>-1</repeat-count>
+			  <repeat-interval>60000</repeat-interval>
+		  </simple>
+	  </trigger>
+
+	  <!--<job>
+		  <name>NoOrderLock_Job</name>
+		  <group>OrdersGroup</group>
+		  <description>无单车并进行锁车</description>
+		  <job-type>YR.Web.jobs.NoOrderLock,YR.Web</job-type>
+		  <durable>true</durable>
+		  <recover>false</recover>
+	  </job>
+
+	  <trigger>
+		  <simple>
+			  <name>NoOrderLock_Trigger</name>
+			  <group>OrdersTrigger</group>
+			  <description>无单车并进行锁车计划</description>
+			  <job-name>NoOrderLock_Job</job-name>
+			  <job-group>OrdersGroup</job-group>
+			  <misfire-instruction>SmartPolicy</misfire-instruction>
+			  <repeat-count>-1</repeat-count>
+			  <repeat-interval>600000</repeat-interval>
+		  </simple>
+	  </trigger>-->
+    
+    <!--<job>
+		  <name>NoOrderMove_Job</name>
+		  <group>OrdersGroup</group>
+		  <description>无单位移报警</description>
+		  <job-type>YR.Web.jobs.NoOrderMove,YR.Web</job-type>
+		  <durable>true</durable>
+		  <recover>false</recover>
+	  </job>
+
+	  <trigger>
+		  <simple>
+			  <name>NoOrderMove_Trigger</name>
+			  <group>OrdersTrigger</group>
+			  <description>无单位移报警计划</description>
+			  <job-name>NoOrderMove_Job</job-name>
+			  <job-group>OrdersGroup</job-group>
+			  <misfire-instruction>SmartPolicy</misfire-instruction>
+			  <repeat-count>-1</repeat-count>
+			  <repeat-interval>600000</repeat-interval>
+		  </simple>
+	  </trigger>-->
+
+    <!--<job>
+      <name>OverSpeedAlarm_Job</name>
+      <group>VehicleGroup</group>
+      <description>超速报警</description>
+      <job-type>YR.Web.jobs.OverSpeedAlarm,YR.Web</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+
+    <trigger>
+      <simple>
+        <name>OverSpeedAlarm_Trigger</name>
+        <group>VehicleTrigger</group>
+        <description>超速报警计划</description>
+        <job-name>OverSpeedAlarm_Job</job-name>
+        <job-group>VehicleGroup</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <repeat-count>-1</repeat-count>
+        <repeat-interval>120000</repeat-interval>
+      </simple>
+    </trigger>-->
+
+    <!--<job>
+      <name>OutAreaAlarm_Job</name>
+      <group>VehicleGroup</group>
+      <description>越界报警</description>
+      <job-type>YR.Web.jobs.OutAreaAlarm,YR.Web</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+
+    <trigger>
+      <simple>
+        <name>OutAreaAlarm_Trigger</name>
+        <group>VehicleTrigger</group>
+        <description>越界报警计划</description>
+        <job-name>OutAreaAlarm_Job</job-name>
+        <job-group>VehicleGroup</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <repeat-count>-1</repeat-count>
+        <repeat-interval>60000</repeat-interval>
+      </simple>
+    </trigger>-->
+
+    <job>
+      <name>ReturnVehicleSendMessage_Job</name>
+      <group>OrdersGroup</group>
+      <description>还车通知</description>
+      <job-type>YR.Web.jobs.ReturnVehicleSendMessage,YR.Web</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+
+    <trigger>
+      <simple>
+        <name>ReturnVehicleSendMessage_Trigger</name>
+        <group>OrdersTrigger</group>
+        <description>还车通知计划</description>
+        <job-name>ReturnVehicleSendMessage_Job</job-name>
+        <job-group>OrdersGroup</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <repeat-count>-1</repeat-count>
+        <repeat-interval>1800000</repeat-interval>
+      </simple>
+    </trigger>
+
+    <!--<job>
+		  <name>ReturnVehicleNotify_Job</name>
+		  <group>OrdersGroup</group>
+		  <description>还车通知</description>
+		  <job-type>YR.Web.jobs.ReturnVehicleNotify,YR.Web</job-type>
+		  <durable>true</durable>
+		  <recover>false</recover>
+		  <job-data-map>
+			  <entry>
+				  <key>minutes_timeout</key>
+				  <value>10</value>
+			  </entry>
+			  <entry>
+				  <key>ios_production</key>
+				  <value>0</value>
+			  </entry>
+		  </job-data-map>
+	  </job>
+
+	  <trigger>
+		  <simple>
+			  <name>ReturnVehicleNotify_Trigger</name>
+			  <group>OrdersTrigger</group>
+			  <description>执行计划</description>
+			  <job-name>ReturnVehicleNotify_Job</job-name>
+			  <job-group>OrdersGroup</job-group>
+			  <misfire-instruction>SmartPolicy</misfire-instruction>
+			  <repeat-count>-1</repeat-count>
+			  <repeat-interval>900000</repeat-interval>
+		  </simple>
+	  </trigger>-->
+  
+  </schedule>
+
+</job-scheduling-data>

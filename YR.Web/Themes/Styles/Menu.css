@@ -1,0 +1,51 @@
+﻿*{font-size: 9pt;}
+html, body{margin: 0px auto;padding: 0px;height: 100%;overflow: auto;}
+body a{outline: none;blr: expression(this.onFocus=this.blur());}
+input, button, select, textarea{outline: none;}
+div, ul, li, dl, dt, dd, img, h1, h2{margin: 0px;padding: 0px;list-style-type: none;border: 0;}
+#Header{height: 70px;/*background-image: url(../images/topbg.png);*/}
+#HeaderLogo{position:absolute;left:0px;margin-top: 8px;margin-left: 20px;}
+#weather{position: absolute;z-index: 3000;right: 0%;top: 0%;width: auto;cursor: pointer;}
+#Headermenu{position: absolute;right:0px;margin-right: 2px;}
+#Headerbotton{height: 23px;border-bottom: 1px solid #ccc;background-image: url(../images/Headerbotton.png);}
+#Content{margin: 0px auto;position:absolute;left:180px;right:0px;top:95px;bottom:0;}
+#left_title{position:absolute;left:0px;text-align: center;width: 180px;line-height: 20px;color: #222;font-weight: bold;}
+#conten_title{text-align: left;line-height: 20px;padding-left: 1px;color: #222;font-weight: bold;overflow:hidden;position:absolute;left:180px;right:0px;}
+/*Tabmenu
+------------------------------------------------*/
+div.removesel{display: inline-block;width: 105px;height: 38px;line-height: 38px;text-align: center;border: 0px;margin-left: 2px;background: url(../images/top_title1.png) no-repeat left;float: left;vertical-align: bottom;cursor: pointer;color: #FFFFFF;font-size: 11pt;font-weight: bold;}
+div.sel{border: 0px;outline: none;display: inline-block;width: 105px;line-height: 38px;text-align: center;height: 38px;margin-left: 2px;background: url(../images/top_title.png) no-repeat left;vertical-align: bottom;float: left;cursor: pointer;color: #395a7b;font-size: 11pt;font-weight: bold;}
+#MainContent{}
+
+/**left导航菜单**/
+#Sidebar{overflow: auto;scrollbar-face-color: #e4e4e4;scrollbar-heightlight-color: #f0f0f0;scrollbar-3dlight-color: #d6d6d6;scrollbar-arrow-color: #240024;scrollbar-darkshadow-color: #d6d6d6;}
+#Sidebar div{display: block;height: 40px;line-height: 40px;text-indent: 7px;text-decoration: none;background: url(../images/leftbotton02.png) no-repeat scroll -1px 0px;color: #222;font-weight: bold;cursor: pointer;}
+#Sidebar div:hover{display: block;height: 40px;line-height: 40px;text-indent: 7px;text-decoration: none;background: url(../images/leftbotton021.png) no-repeat scroll -1px 0px;color: #FFFFFF;font-weight: bold;}
+#Sidebar img{padding-top: 7px;padding-left: 29px;margin-right: 2px;float: left;}
+#Sidebar .leftselected{display: block;height: 40px;line-height: 40px;text-indent: 7px;text-decoration: none;background: url(../images/leftbotton021.png) no-repeat scroll -1px 0px;color: #FFFFFF;font-weight: bold;}
+
+/* 钢琴菜单 begin */
+.navPanel img, .navSelect img{vertical-align: middle;margin: 0px 5px 0px 0px;}
+.navigation{width: 180px;_width: 180px;border-right: 1px solid #ccc;margin-right: 0;left:0;bottom:0;top:95px;position:absolute;}
+.navPanel{padding-left: 1px;overflow-x: hidden;overflow-y: scroll;scrollbar-face-color: #e4e4e4;scrollbar-heightlight-color: #f0f0f0;scrollbar-3dlight-color: #d6d6d6;scrollbar-arrow-color: #240024;scrollbar-darkshadow-color: #d6d6d6;}
+.navPanel div{width: 160px;display: block;height: 40px;line-height: 40px;text-indent: 7px;text-decoration: none;background: url(../images/leftbotton02mimi.png) no-repeat scroll -1px 0px;color: #222;cursor: pointer;font-weight: bold;}
+.navPanel .selected{display: block;height: 40px;line-height: 40px;text-indent: 7px;text-decoration: none;background: url(../images/leftbotton021mimi.png) no-repeat scroll -1px 0px;color: #FFFFFF;}
+.navPanel .navHover{display: block;height: 40px;line-height: 40px;text-indent: 7px;text-decoration: none;background: url(../images/leftbotton021mimi.png) no-repeat scroll -1px 0px;color: #FFFFFF;}
+.navPanel img{padding-left: 19px;padding-right: 5px;vertical-align: middle;margin: 0px 5px 0px 0px;}
+.navPanelMini{padding: 10px;margin-right: 0;overflow: auto;scrollbar-face-color: #e4e4e4;scrollbar-heightlight-color: #f0f0f0;scrollbar-3dlight-color: #d6d6d6;scrollbar-arrow-color: #240024;scrollbar-darkshadow-color: #d6d6d6;}
+.navPanelMini div{padding: 5px 15px;display: block;color: #000000;border: solid 1px #ffffff;margin-bottom: 1px;cursor: pointer;}
+.navPanelMini div img{padding-right: 5px;height: 22px;width: 22px;border: 0px;background-position: 0 0;vertical-align: middle;margin: 0px 5px 0px 0px;}
+.navPanelMini .navHover{background2: #D0E5F5;background1: #FBEC88;background: #e0eccc;border: solid 1px #ccc;}
+.navPanelMini .selected{border: solid 1px #ccc;background2: #D0E5F5;background1: #FBEC88;background: #e0eccc;}
+.navSelect{bottom: 0px;width: 100%;}
+.navSelect div{height: 22px;line-height: 20px;display: block;padding: 5px;background-image: url('../images/nav_link.gif');background-repeat: repeat-x;font-weight: bold;text-decoration: none;color: #000000;cursor: pointer;}
+.navSelect .navHover{height: 20px;line-height: 18px;padding-left: 4px;color: #FFF;border: solid 1px #FEDC32;background: #FEDC32;filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FEDC32', endColorstr='#FEAA32');background: linear-gradient(top, #FEDC32, #FEAA32);background: -moz-linear-gradient(top, #FEDC32, #FEAA32);background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FEDC32), to(#FEAA32));text-shadow: -1px -1px 1px #1c6a9e;}
+.navSelect .selected{height: 20px;line-height: 18px;padding-left: 4px;color: #FFF;border: solid 1px #FEDC32;background: #FEDC32;filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FEDC32', endColorstr='#FEAA32');background: linear-gradient(top, #FEDC32, #FEAA32);background: -moz-linear-gradient(top, #FEDC32, #FEAA32);background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FEDC32), to(#FEAA32));text-shadow: -1px -1px 1px #1c6a9e;}
+.navSelect img{vertical-align: middle;margin: -2px 5px 0px 0px;height: 20px;}
+/* 钢琴菜单 end */
+
+/**left导航树菜单**/
+#sidebarTree{overflow: auto;scrollbar-face-color: #e4e4e4;scrollbar-heightlight-color: #f0f0f0;scrollbar-3dlight-color: #d6d6d6;scrollbar-arrow-color: #240024;scrollbar-darkshadow-color: #d6d6d6;}
+/**全屏**/
+.ContentMaximize{position: absolute;z-index: 999;cursor: pointer;left: 0%;top: 0%;background: #fff;}
+#fullreturn{position: absolute;z-index: 999;cursor: pointer;right: 0%;top: 0%;background: url('../images/close_32.png')no-repeat scroll;width: 32px;height: 32px;display: none;}

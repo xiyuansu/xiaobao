@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ver>
+  <android AndroidVersion="280" AndroidUrl="http://api.xiaobaochuxing.com/app/xiaobaochuxing283.apk" AndroidUpdataRemark="发现新版本V2.8.3:\n更新了新功能，赶快过来用用吧"></android>
+  
+  <ios IOSVersion="0" IOSUrl="https://itunes.apple.com/cn/app/%E5%B0%8F%E5%AE%9D%E5%87%BA%E8%A1%8C/id1355598480?mt=8" IOSUpdataRemark="发现新版本，赶快过来用用吧"></ios>
+</ver>

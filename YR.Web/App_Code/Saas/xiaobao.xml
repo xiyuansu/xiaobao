@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<appSettings>
+	<!-- 网站域名-->
+	<add key="webRoot" value="http://api.xiaobaochuxing.com" />
+	<!-- 网站Logo-->
+	<add key="webLogo" value="/Themes/Images/logo_jim258.png" />
+	<!-- 连接字符串是否加密-->
+	<add key="ConStringEncrypt" value="false" />
+	<!-- SqlServer连接字符串:Server=服务器地址;Database=库名;Uid=用户;Pwd=密码-->
+	<add key="SqlServer_YR_DB" value="Server=39.106.206.102;Database=XiaoBaoDB;Uid=xiaobao_user;Pwd=XiaoBao@2018;Pooling=true;Min Pool Size=10;Max Pool Size=10000;" />
+	<!-- 系统默认登录账户 -->
+	<add key="CurrentUserName" value="Administrator" />
+	<!-- 系统默认登录密码 -->
+	<add key="CurrentPassword" value="" />
+	<!-- 是否启动服务器缓存-->
+	<add key="IsCache" value="false" />
+	<!-- 服务器缓存设置时间（分钟）-->
+	<add key="TimeCache" value="30" />
+	<add key="server_ip" value="101.37.33.151"/>
+	<add key="server_port" value="9800"/>
+	<!-- 是否自动重启IIS-->
+	<add key="IsRestartIIS" value="false" />
+	<!-- 自动重启IIS设置时间（每天凌晨01点）-->
+	<add key="RestartIISTime" value="01:00:00" />
+	<!-- 短信验证码有效时间-->
+	<add key="VerificationCodeValidTime" value="10" />
+	<!-- 是否写日志-->
+	<add key="LogIsWrite" value="true" />
+	<!-- 系统日志保存路径-->
+	<add key="LogFilePath" value="C://YR_Log//SysLog" />
+	<!-- 允许恢复数据库-->
+	<add key="IsRecoverData" value="false" />
+	<!-- 是否启动自动备份数据库-->
+	<add key="IsBackupsData" value="false" />
+	<!-- 自动启动备份数据库设置时间（每天凌晨02点）-->
+	<add key="BackupsDataTime" value="02:00:00" />
+	<!-- 备份数据库设置保存路径 -->
+	<add key="BackupsDataPath" value="D://YR_Log//DataBackups" />
+	<!-- 发出系统异常错误邮箱的地址 -->
+	<add key="ErrorReportMailUserName" value="1921397796@qq.com" />
+	<!-- 软件注册码 -->
+	<add key="RegistrationCode" value="2A1B132C0E64FA299B014B39F7DE5C2F" />
+	<!-- 公司信息 -->
+	<add key="CustomerCompanyName" value="小宝出行" />
+	<!-- 软件名称 -->
+	<add key="SoftName" value="小宝出行后台管理系统" />
+	<!-- 当前软件版本 -->
+	<add key="Version" value="1.0.1" />
+	<!-- 短信平台url地址-->
+	<add key="SMSURL" value="http://123.57.51.191:8888/sms.aspx" />
+	<!-- 平台加密传输key-->
+	<add key="EncryptionKey" value="qazwsxedcrfvtgbyhnujmikoyhbgtrew" />
+	<!--客户端加密传输key-->
+	<add key="ClientEncryptionKey" value="qazwsxedcrfvtgbyhnujmikoyhbgtrew"/>
+	<!--GPS接口-->
+	<add key="GPSURL" value="http://open.liabar.com/device"/>
+	<!--使用数据权限部门名称（多部门以逗号隔开）-->
+	<add key="DataAuthDept" value="维修部"/>
+	<!--检索显示指定千米数范围内的车、停车处和换点处-->
+	<add key="NearVehicleKM" value="100"/>
+	<!--检索显示指定千米数范围内停车处-->
+	<add key="NearParkingKM" value="100"/>
+	<!--检索车、停车处和换点处每页记录数-->
+	<add key="PageNum" value="100"/>
+
+	<!--文件服务器配置-->
+	<add key="FileServer" value="http://api.xiaobaochuxing.com"/>
+	<add key="UploadImagePath" value="/Resource/Image/"/>
+
+	<!--百度地图配置-->
+	<!--百度地图服务器端API Key-->
+	<add key="BaiduMapServerKey" value=""/>
+	<!--百度地图浏览器端API Key-->
+	<add key="BaiduMapBrowserKey" value=""/>
+	<!--根据GPS经纬度转换百度经纬度接口-->
+	<add key="BaiduGeoConvertURL" value="http://api.map.baidu.com/geoconv/v1/" />
+	<!--根据经纬度获取位置信息-->
+	<add key="LocationURL" value="http://api.map.baidu.com/geocoder/v2/" />
+	<!--百度地图建议地址列表接口-->
+	<add key="SuggestionURL" value="http://api.map.baidu.com/place/v2/suggestion"/>
+
+	<!--高德地图配置-->
+	<add key="AMapServerKey" value="94635f129a11cbe866719972a2ccbfa3"/>
+	<add key="AMapBrowserKey" value="8c028e050626d427cd3b18e9ff495024"/>
+
+	<!--Redis配置-->
+  <!--<add key="redis_db" value="111.74.59.199:6379,ssl=false,password=redis#jieming@2017,defaultDatabase=0"/>-->
+  <add key="redis_db" value="39.106.206.102:6379,ssl=false,defaultDatabase=0"/>
+	
+	<!--RabbitMQ配置-->
+	<add key="rabbitmq_hostname" value="111.74.59.199"/>
+	<add key="rabbitmq_username" value="jieming"/>
+	<add key="rabbitmq_password" value="jieming@2017"/>
+	<add key="rabbitmq_virtualhost" value="/"/>
+
+	<!--微信支付配置-->
+	<add key="wx_AppId" value="wx64a9c3caf5425def"/>
+	<add key="wx_MchId" value="1499156542"/>
+	<add key="wx_PayKey" value="52d0bf463c91e000fa06f83f6f2d462d"/>
+	<!--<add key="wx_api_cert" value="D:\\api.xiaobaochuxing.com\\App_Code\\apiclient_cert.p12"/>-->
+  <add key="wx_api_cert" value="D:\\Project\\xiaobao\\YR.Web\\App_Code\\apiclient_cert.p12"/>
+
+  <!--支付宝配置-->
+	<add key="alipay_app_id" value="2018022202251909"/>
+	<add key="alipay_partner" value="2088031007376702"/>
+	<add key="alipay_private_key" value="MIIEpAIBAAKCAQEA0U4gX+igm1EC4t9+jikf3eaFhgcFQEwWoedKDGshL+fspTnXuaffmKTfXTji4sPhVPJpZba3BEWfkTJaIqR6WeJqOsAOCSHF+y2wNTobyTbXPeGgMdBL/48mrXKK+RQSFWiHI8PHoX/F/udasCzFscIjtUsXfRFZ49li8NB6jlCsnAms8PgyS+TCJreXdiBB+yd2bYxN7mF3pfLSqltRyAl3JRImrAQV4pSBJC3ko9S1Pf73yXmlTI/OSvK8sHGzCM5tXH1c78q6KjXzSjh5bgyUVNZVK8EyqW9F/8QpuSm6XD2g9pMfnD+dx1I9qnfB5vV5x3n2TpH0aQAqVS0wlwIDAQABAoIBABSk4AyVpUGse9xkrtbWt43rbsAJcTsmRhUx+tu+tUdEWNLzIZPuOt+TY3SOZ9J1/4OhZUPjAaoqM9LeZIWGM4sqCdBBoSDFdAGSQA7/7D2saw5vcp13LgfG1snEwnBOynnSFYIxjT8gmybJKui1gcpGm78F6Qss6vDOQDQAXBYtMRwp6Shf1VSB59zcEWLR/RLmExeoxtcO00R87TiBNC8XAefmDQEdWi4HmX4xbsoHyrkPdBrkSdd297hQDeAEK+yF7fEskQbUXx8UeZF81y6rUUDYyIR6lAFbt25QjRqkzV0RWBOrf8mxQO/wRdZvcOSOQOrY7yWYlXWoy7tN4gECgYEA9TMpzmq1UWupUdNVrpbKkGwY2CHa3JBTHox/mugSIYUqHLCVbDmCH9M5wVqwcqaNEIdewVNrZqZqvqjg95PyV1zSkpX5wduatBtqSkxD74kKwAjTCgltBdwxEnYkhVLz9Z6nIMI2Ig1ZfvkqhlG8tV6PobNLQn2pnxShFNJ+/GUCgYEA2oY4XxFPpIGHn0QE1KOjATTzxGe86ICu472PqjylM2r71ClmWx0vxXNnH9/eg+lgKwQp1HefzMH+cJyxNURWVKyLSB4tVyRy9M/romtTPqqccjsj34UOxQq4JneQnZ6H09/bXcnEJAGM/IpOJBIvWlCrVIzSbOdpy+Tqb1QK00sCgYEA5DH5dmFY3a2UptJHq3QqkL4JYRwg06R9trCLEV9pgEiuKIUuisn6kCPEXG5KSGk4X2mchc9c5Ot77HS+6aqGn0eDsWhiSEhYccYR5ZOUphikKJQN1AlxrUJ/aO8KjgnlgXFlmNcmCgrif4jkSp1HQoP+qD50jCzm72YDg51jEQECgYEAh/m04hMXh7nB9myQxO/94iZc+P3EIrjQGo498yRBd7k+ckpAkrmanDavGLpo75QsbxfsH3VATlz4QoJ+EjMvtQiYsot0kyDvFz651RsLdZccOkhqjg9xnVKKPAVyS2H2CvTkv3tpPS5p2EsHTJK0PHKt6bKmzXVB88nBxvx4r/kCgYBM+cH9v9G7VckKrJMtDOWSUfEafUpq1rjmokdBUPktCsxTu/SU9Zs7T2elMNc4Wpb/VZ46ambWTo+1qRomMcOnBaREf37+u8juLDDLV9MMY0fsxxgJ7ettKSehl5VFVCyELJ3peXW+gWoDjOeCMo2J1Bxd7b3NTVlEaVDXKwCz6A=="/>
+  <!--<add key="alipay_public_key" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0U4gX+igm1EC4t9+jikf3eaFhgcFQEwWoedKDGshL+fspTnXuaffmKTfXTji4sPhVPJpZba3BEWfkTJaIqR6WeJqOsAOCSHF+y2wNTobyTbXPeGgMdBL/48mrXKK+RQSFWiHI8PHoX/F/udasCzFscIjtUsXfRFZ49li8NB6jlCsnAms8PgyS+TCJreXdiBB+yd2bYxN7mF3pfLSqltRyAl3JRImrAQV4pSBJC3ko9S1Pf73yXmlTI/OSvK8sHGzCM5tXH1c78q6KjXzSjh5bgyUVNZVK8EyqW9F/8QpuSm6XD2g9pMfnD+dx1I9qnfB5vV5x3n2TpH0aQAqVS0wlwIDAQAB"/>-->
+  <add key="alipay_public_key" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhEw7p67VDTj7NU2VG8uzYppWHEnvR3+KGorK0wDwHmjW7Qx6BaBBufWNH3NGFIsQ/OOVZezgjQ+aNIeaUrxu10JkcPo6BGlrusoPLt5tlv6zVD78/vriy6BmpiOzzAPE1kh/jTnU74s0IwXgFeP3CSg2Nl1q7fgoKhp7zznfQTmo71SostwDTqSMGjw/aB9WowQmwZCp6RqybCUVHyBSh8QZ0po7CJdfpRFxoeQj+w0hPkIVrWBtQfYg9X9AMhYJ8+Ad2qICRAquUCbLPSrmjhhwSSf7xr3was9+7e98Vxob7ON7rgWzbSyCHG+cxfWMeuaP6z+TJdtDTh+J859inQIDAQAB"/>
+
+	<!--极光配置APP端-->
+	<add key="JPush_AppKey" value="a1ceca7f0692b9a1e768542c"/>
+	<add key="JPush_MasterSecret" value="96d68a2a94d36e8f823d227f"/>
+
+	<!--极光配置运维端-->
+	<add key="JPush_AppKey_OpsApp" value="8e85881779f10a45eab5b027"/>
+	<add key="JPush_MasterSecret_OpsApp" value="45aad5cb141891996dc8d7cf"/>
+	
+	<!--诺正通实名认证配置-->
+	<add key="IDCardVerfy_MallID" value="111140"/>
+	<add key="IDCardVerfy_AppKey" value="8c4716ec6dcddf1452d97b98834c49eb"/>
+
+	<!--助通科技验证码短信配置-->
+	<add key="ZTSMS_UserName" value="wenruiqcyzm"/>
+	<add key="ZTSMS_Password" value="G8eiQW"/>
+	<add key="SMS_CompanyName" value="小宝出行"/>
+
+  <!--助通科技业务短信配置-->
+  <add key="ZTSMS_Business_UserName" value="wenruiqchy"/>
+  <add key="ZTSMS_Business_Password" value="dWFOI8"/>
+
+	<!--小安模块调用配置-->
+	<add key="XACloud_URL" value="http://101.37.33.108:5021/simulate/service"/>
+	<add key="XACloud_KEY" value="d9cbdcf41d2211e8accf0ed5f89f718b"/>
+	
+</appSettings>

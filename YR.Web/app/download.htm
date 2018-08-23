@@ -1,0 +1,302 @@
+﻿
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>小宝出行，自在畅行</title>
+	<link rel="stylesheet" href="../Themes/Styles/reset.css">
+	<style type="text/css">
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            font-size: 1.024rem;
+            font-family: 'PingFangSC-Regular';
+            position: relative;
+        }
+
+        .active {
+            height: 0;
+            display: none;
+        }
+
+        .wel_logo {
+            margin-bottom: 0.853333rem;
+            width: 100%;
+            height: 13.141333rem;
+            background: url(/Themes/Images/welcomechange.png) no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .wel-text {
+            width: 10.837333rem;
+            height: 1.408rem;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+            .wel-text p {
+                line-height: 1.408rem;
+                font-size: 0.853333rem;
+                color: #9b9b9b;
+                letter-spacing: -1px;
+            }
+        /*下载区域*/
+        .lg_download {
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            height: 2.56rem;
+        }
+
+        .dl_cover {
+            opacity: 0.6;
+            background: #000000;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .dl_main {
+            width: 14.549333rem;
+            margin: 0 auto;
+            margin-top: 0.426667rem;
+            height: 1.706667rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        .dl_main_left {
+            float: left;
+        }
+
+            .dl_main_left li {
+                float: left;
+                margin-right: 0.426667rem;
+                text-align: left;
+            }
+
+        .dl_main_right {
+            float: right;
+            width: 3.84rem;
+            height: 1.706667rem;
+            background: #fcb80a;
+            text-align: center;
+            line-height: 1.706667rem;
+            color: #fff;
+            font-size: 0.64rem;
+            border-radius: 0.170667rem;
+        }
+
+        .dl_logo {
+            float: left;
+            background: url(/Themes/Images/logoqr.png) no-repeat center;
+            background-size: 100% 100%;
+            width: 1.706667rem;
+            height: 1.706667rem;
+        }
+
+        .logo_text {
+        }
+
+            .logo_text span:first-child {
+                margin-top: 0.170667rem;
+                display: block;
+                width: 3.370667rem;
+                height: 0.768rem;
+                background: url(/Themes/Images/logo_txt.png) no-repeat center;
+                background-size: 100% 100%;
+            }
+
+            .logo_text span:last-child {
+                color: #fff;
+                font-size: 0.512rem;
+                display: block;
+            }
+        /*遮盖层*/
+        .cover {
+            height: 100%;
+            width: 100%;
+            z-index: 10;
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: none;
+        }
+
+        .coverbg {
+            opacity: 0.8;
+            background-color: #000000;
+            filter: alpha(opacity=80);
+            height: 100%;
+            width: 100%;
+        }
+        /*覆盖层文字*/
+        .covertext {
+            color: #fff;
+            position: absolute;
+            z-index: 11;
+            right: 1rem;
+            top: 0.5rem;
+            width: 6.741333rem;
+            height: 2.816rem;
+            font-size: 0.682667rem;
+        }
+
+            .covertext ul li.active {
+                color: #ffaa00;
+            }
+
+            .covertext ul li:first-child span {
+                display: inline-block;
+                width: 0.170667rem;
+                height: 0.170667rem;
+                border-radius: 50%;
+                background: #fff;
+            }
+
+        .up {
+            width: 1.493333rem;
+            height: 1.664rem;
+            background: url(/Themes/Images/up.png) no-repeat center;
+            background-size: 100% 100%;
+            position: absolute;
+            right: -2.133333rem;
+            top: -0.810667rem;
+        }
+    </style>
+
+</head>
+<body>
+	<!-- 占位div -->
+	<div class="active"></div>
+	<!-- logo -->
+	<div class="wel_logo"></div>
+	<div class="wel-text">
+		<p>小宝出行，自在畅行</p>
+	</div>
+	<!-- 下载区域 -->
+			<div class="lg_download">
+					<div class="dl_cover"></div>
+					<div class="dl_main">
+						<div class="dl_main_left">
+							<ul>
+								<li class="dl_logo"></li>
+								<li>
+									<div class="logo_text" style="color:white;">
+                                        小宝出行
+										<!--<span></span>
+										<span>小宝出行</span>-->
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="dl_main_right">
+							立即下载
+						</div>
+					</div>
+			</div>
+		<!-- 遮盖 -->
+		<div class="cover">
+				<div class="coverbg"></div>
+				<div class="covertext">
+                    点击右上角···，并在浏览器中打开即可下载安装应用
+						<!--<ul>
+							<li>点击右上角“●●●”</li>
+							<li>选择在“Safari中打开”</li>
+							<li>即可下载安装应用</li>
+						</ul>
+						<div class="up"></div>-->
+				</div>
+		</div>
+    <script src="../Themes/Scripts/rem.js"></script>
+    <script src="../Themes/Scripts/zepto.js"></script>
+    <script src="../Themes/Scripts/fastclick.js"></script>
+    <script src="../Themes/Scripts/director.js"></script>
+    <script src="../Themes/Scripts/open.js"></script>
+    <script type="text/javascript">
+        //关闭提示按钮
+        var showBtn = {
+            dom: $('.cover'),
+            init: function () {
+                this.bindEvent();
+            },
+            bindEvent: function () {
+                this.dom.click(function () {
+                    $(this).hide();
+                })
+            },
+            show: function () {
+                this.dom.show();
+            }
+        }
+
+        //下载按钮
+        var downBtn = {
+            dom: $('.dl_main_right'),
+            init: function () {
+                this.bindEvent();
+            },
+            bindEvent: function () {
+                var isAndroid = false;
+                var isIOS = false;
+                //判断是安卓手机还是苹果
+                var u = navigator.userAgent;
+                if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+                    //安卓手机
+                    //location.href = "http://api.xiaobaochuxing.com/app/xiaobaochuxing280.apk";
+                    isAndroid = true;
+                    var ua = navigator.userAgent.toLowerCase();//获取判断用的对象
+                    if (ua.match(/MicroMessenger/i) == "micromessenger") {
+                        //在微信中打开
+                        this.dom.click(function () {
+                            showBtn.show();
+                        });
+                        return;
+                    }
+                }
+                else if (u.indexOf('iPhone') > -1) {
+                    isIOS = true;
+                    //苹果手机
+                    var ua = navigator.userAgent.toLowerCase();//获取判断用的对象
+                    if (ua.match(/MicroMessenger/i) == "micromessenger") {
+                        //在微信中打开
+                        this.dom.click(function () {
+                            showBtn.show();
+                        });
+                        return;
+                    }
+                }
+                this.dom.click(function () {
+                    if (isAndroid) {
+                        location.href = "http://api.xiaobaochuxing.com/app/xiaobaochuxing280.apk";
+                    }
+                    if (isIOS) {
+                        location.href ="https://itunes.apple.com/cn/app/%E5%B0%8F%E5%AE%9D%E5%87%BA%E8%A1%8C/id1355598480?mt=8";
+                    }
+                })
+            }
+        }
+        //判断打开方式
+        window.onload = function () {
+
+            showBtn.init();
+            downBtn.init();
+            if (browser.versions.mobile) {//判断是否是移动设备打开。
+                var ua = navigator.userAgent.toLowerCase();//获取判断用的对象
+                if (ua.match(/MicroMessenger/i) == "micromessenger") {
+                    //在微信中打开
+                }
+
+            } else {
+                //否则就是PC浏览器打开
+            }
+        }
+    </script> 
+</body>
+</html>

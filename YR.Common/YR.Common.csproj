@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4AF69D49-B0E8-4041-905D-0ABE81C53932}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>YR.Common</RootNamespace>
+    <AssemblyName>YR.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Interop.SQLDMO">
+      <HintPath>Lib\Interop.SQLDMO.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\YR.Web\Lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>Lib\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>Lib\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
+      <HintPath>Lib\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\YR.Web\Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.DataAccess">
+      <HintPath>..\YR.DataBase\Lib\Oracle.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="RabbitMQ.Client">
+      <HintPath>Lib\RabbitMQ.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis">
+      <HintPath>Lib\StackExchange.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DotNetBean\CookieHelper.cs" />
+    <Compile Include="DotNetBean\RequestSession.cs" />
+    <Compile Include="DotNetBean\SessionUser.cs" />
+    <Compile Include="DotNetBean\TcpClient.cs" />
+    <Compile Include="DotNetCache\CacheFactory.cs" />
+    <Compile Include="DotNetCache\ICache.cs" />
+    <Compile Include="DotNetCache\RedisCache.cs" />
+    <Compile Include="DotNetCode\CacheHelper.cs" />
+    <Compile Include="DotNetCode\CommonHelper.cs" />
+    <Compile Include="DotNetCode\ConvertHelper.cs" />
+    <Compile Include="DotNetCode\DateTimeHelper.cs" />
+    <Compile Include="DotNetCode\DynamicJson.cs" />
+    <Compile Include="DotNetCode\DynamicXml.cs" />
+    <Compile Include="DotNetCode\HttpUtil.cs" />
+    <Compile Include="DotNetCode\PinyinHelper.cs" />
+    <Compile Include="DotNetCode\RequestHelper.cs" />
+    <Compile Include="DotNetCode\RMBHelper.cs" />
+    <Compile Include="DotNetCode\SqlFilterHelper.cs" />
+    <Compile Include="DotNetCode\SqlParam.cs" />
+    <Compile Include="DotNetCode\StringHelper.cs" />
+    <Compile Include="DotNetCode\ValidateUtil.cs" />
+    <Compile Include="DotNetConfig\ConfigHelper.cs" />
+    <Compile Include="DotNetData\DataTableHelper.cs" />
+    <Compile Include="DotNetData\HashtableHelper.cs" />
+    <Compile Include="DotNetData\ReaderToIListHelper.cs" />
+    <Compile Include="DotNetData\XMLHelper.cs" />
+    <Compile Include="DotNetEamil\SMTPManager.cs" />
+    <Compile Include="DotNetEncrypt\DESEncrypt.cs" />
+    <Compile Include="DotNetEncrypt\Md5Helper.cs" />
+    <Compile Include="DotNetFile\DirFileHelper.cs" />
+    <Compile Include="DotNetFile\FileDownHelper.cs" />
+    <Compile Include="DotNetFile\FileHelper.cs" />
+    <Compile Include="DotNetFile\FTPHelper.cs" />
+    <Compile Include="DotNetFile\GZipHelper.cs" />
+    <Compile Include="DotNetFile\UploadHelper.cs" />
+    <Compile Include="DotNetImage\ImageHelper.cs" />
+    <Compile Include="DotNetJson\JsonHelper.cs" />
+    <Compile Include="DotNetMQ\IMessage.cs" />
+    <Compile Include="DotNetMQ\MessageData.cs" />
+    <Compile Include="DotNetMQ\MessageEventHandler.cs" />
+    <Compile Include="DotNetMQ\MessageFactory.cs" />
+    <Compile Include="DotNetMQ\RabbitMq.cs" />
+    <Compile Include="DotNetSMS\ZTSMS.cs" />
+    <Compile Include="DotNetSMS\HXTSMS.cs" />
+    <Compile Include="DotNetSMS\ISMS.cs" />
+    <Compile Include="DotNetSMS\SMSFactory.cs" />
+    <Compile Include="DotNetUI\ControlBindHelper.cs" />
+    <Compile Include="DotNetUI\ExcelHelper.cs" />
+    <Compile Include="DotNetUI\IPScanerHelper.cs" />
+    <Compile Include="DotNetUI\ShowMsgHelper.cs" />
+    <Compile Include="DotNetUI\WebHelper.cs" />
+    <Compile Include="DotNetLog\Log.cs" />
+    <Compile Include="DotNetLog\LogFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemInfo\SystemInfo.cs" />
+    <Compile Include="ZCloudUtil\XiaoAnCloudConfig.cs" />
+    <Compile Include="ZCloudUtil\ZCloudCore.cs" />
+    <Compile Include="ZCloudUtil\ZCloudMD5.cs" />
+    <Compile Include="ZCloudUtil\YDCloudConfig.cs" />
+    <Compile Include="ZCloudUtil\ZCloudConfig.cs" />
+    <Compile Include="ZCloudUtil\ZCloudSignUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Lib\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

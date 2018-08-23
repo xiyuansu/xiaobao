@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="deposit_notify_url.aspx.cs" Inherits="YR.Web.api.app.pay.alipay.deposit_notify_url" %>

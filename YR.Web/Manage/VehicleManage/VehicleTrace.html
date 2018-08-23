@@ -1,0 +1,298 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>车辆行驶轨迹</title>
+    <link href="/Themes/Styles/Site.css" rel="stylesheet" type="text/css" />
+    <script src="../../Themes/Scripts/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=3ebebe47e3f4456aae8b6566657c5714&plugin=AMap.ToolBar,AMap.Scale,AMap.Geolocation,AMap.MapType"></script>
+    <link href="../../Themes/Scripts/artDialog/skins/blue.css" rel="stylesheet" />
+    <script src="../../Themes/Scripts/artDialog/jquery.artDialog.js"></script>
+    <style type="text/css">
+        body{margin:0px;padding:0px;font-size:12px;height:100%;}
+        #map{width:100%;height:100%;}
+    </style>
+
+    <script type="text/javascript">
+        var map;
+        var traceOverlay;
+        var traceMarker;
+        var vehicleid;
+        var orderid;
+        $(function () {
+            initMap();
+            vehicleid = GetQueryString("vid");
+            orderid = GetQueryString("oid");
+            if (vehicleid != null && vehicleid.length > 0) {
+                vehicleTrace(vehicleid, orderid);
+                loadServiceArea();
+            }
+        });
+
+        function initMap()
+        {
+            map = new AMap.Map("map", {
+                resizeEnable: true,
+                zoom: 15,
+            });
+            map.addControl(new AMap.ToolBar());
+            map.addControl(new AMap.Scale());
+            map.addControl(new AMap.Geolocation());
+            map.addControl(new AMap.MapType());
+            map.setMapStyle('amap://styles/light');
+            /*map.on("zoomchange", function () {
+                if (map.getZoom() <= 16 && map.getZoom() >= 10) {
+                    map.getCity(function (result) {
+                        if (citycode != result.citycode || serviceAreasOverlay.length == 0) {
+                            citycode = result.citycode;
+                            loadServiceArea(citycode);
+                        }
+                    });
+                }
+                else {
+                    if (serviceAreasOverlay.length == 0) {
+                        map.remove(serviceAreasOverlay);
+                        serviceAreaOverlay.length = 0;
+                    }
+                    citycode = "";
+                }
+            });
+            map.on("complete", function () {
+                map.getCity(function (result) {
+                    citycode = result.citycode;
+                    loadServiceArea(citycode);
+                });
+            });*/
+        }
+
+        function vehicleTrace(vid,oid)
+        {
+            Loading(true);
+            $.ajax({
+                url: "/api/app/VehicleController.ashx",
+                type: "POST",
+                dataType: "json",
+                data: { method: "GetVehicleTrace", VehicleID: vid,OrderID:oid },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    Loading(false);
+                    new Toast({ message: textStatus }).show();
+                },
+                success: function (resp) {
+                    Loading(false);
+                    if (resp.Code == "0") {
+                        if (resp.Data == null) {
+                            loadVehicleInfo();
+                            new Toast({message:"未找到订单车辆轨迹数据"}).show();
+                            return;
+                        }
+
+                        //map.clearMap();
+                        var points = new Array();
+                        $(eval(resp.Data)).each(function (idx, item) {
+                            points.push(new AMap.LngLat(item.AMAP_LONGITUDE, item.AMAP_LATITUDE))
+                        });
+                        var polyline = new AMap.Polyline({
+                            map: map,
+                            path:points,
+                            strokeColor: "#00FF7F",
+                            strokeWeight: 2,
+                            strokeOpacity: 1
+                        });
+                        traceOverlay = polyline;
+
+                        var point = new AMap.LngLat(points[0].getLng(), points[0].getLat());
+                        var myIcon = new AMap.Icon({
+                            image: "/Themes/Images/marker_vehicle_icon_press.png",
+                            imageSize: new AMap.Size(25, 32),
+                            size: new AMap.Size(25, 32),
+                            imageOffset: new AMap.Pixel(0, 0)
+                        });
+                        var marker = new AMap.Marker({
+                            icon: myIcon,
+                            position: point,
+                            map: map
+                        });
+                        traceMarker = marker;
+                        map.panTo(marker.getPosition());
+
+                        marker.on("click", function () {
+                            if (playTraceTimer != 0) {
+                                window.clearInterval(playTraceTimer);
+                            }
+                            else {
+                                playTraceTimer = window.setInterval("playTrace()", 200);
+                            }
+                        });
+                    }
+                    else {
+                        loadVehicleInfo();
+                        new Toast({ message: "加载轨迹数据失败:" + resp2.Message }).show();
+                    }
+                }
+            });
+        }
+
+        function loadVehicleInfo() {
+            //map.clearMap();
+            $.ajax({
+                url: "/api/app/VehicleController.ashx",
+                type: "POST",
+                dataType: "json",
+                data: { method: "GetVehicleByID", VehicleID: vehicleid, Latitude: 0, Longitude: 0 },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    Loading(false);
+                    alert(textStatus);
+                },
+                success: function (resp) {
+                    //Loading(false);
+                    if (resp.state == "success") {
+                        var vehicleInfo = resp.content.VehicleInfo;
+                        var latlng = new AMap.LngLat(vehicleInfo.LONGITUDE, vehicleInfo.LATITUDE);
+                        var myIcon = new AMap.Icon({
+                            image: "/Themes/Images/marker_vehicle_icon_press.png",
+                            imageSize: new AMap.Size(25, 32),
+                            size: new AMap.Size(25, 32),
+                            imageOffset: new AMap.Pixel(0, 0)
+                        });
+                        var marker = new AMap.Marker({
+                            icon: myIcon,
+                            position: latlng,
+                            map: map
+                        });
+                        marker.setzIndex(9999);
+                        map.setZoom(15);
+                        map.panTo(latlng);
+                    };
+                }
+            });
+        }
+
+        var playPos = 0;
+        var playTraceTimer = 0;
+        function playTrace()
+        {
+            var points = traceOverlay.getPath();
+            if (playPos < points.length) {
+                playPos += 1;
+                traceMarker.setPosition(points[playPos]);
+            }
+            else
+            {
+                window.clearInterval(playTraceTimer);
+                playTraceTimer = 0;
+                playPos = 0;
+                traceMarker.setPosition(points[playPos]);
+            }
+        }
+
+        var Toast = function (config) {
+            this.context = config.context == null ? $('body') : config.context;//上下文
+            this.message = config.message;//显示内容
+            this.time = config.time == null ? 5000 : config.time;//持续时间
+            this.left = config.left;//距容器左边的距离
+            this.top = config.top;//距容器上方的距离
+            this.init();
+        }
+        var msgEntity;
+        Toast.prototype = {
+            //初始化显示的位置内容等
+            init: function () {
+                $("#toastMessage").remove();
+                //设置消息体
+                var msgDIV = new Array();
+                msgDIV.push('<div id="toastMessage" style=\'border-radius:10px;\'>');
+                msgDIV.push('<span>' + this.message + '</span>');
+                msgDIV.push('</div>');
+                msgEntity = $(msgDIV.join('')).appendTo(this.context);
+                //设置消息样式
+                var left = this.left == null ? this.context.width() / 2 - msgEntity.find('span').width() / 2 : this.left;
+                var vertical = (document.body.clientHeight - msgEntity.height()) / 2;
+                vertical = document.body.clientHeight - msgEntity.height() - 200;
+                var top = this.top == null ? vertical : this.top;
+                msgEntity.css({ position: 'absolute', top: top, 'z-index': '999', left: left, 'background-color': 'black', color: 'white', 'font-size': '18px', padding: '10px', margin: '10px' });
+                msgEntity.hide();
+            },
+            //显示动画
+            show: function () {
+                msgEntity.fadeIn(this.time / 2);
+                msgEntity.fadeOut(this.time / 2);
+            }
+        }
+
+        var serviceArea_list = new Array();
+        function loadServiceArea() {
+            serviceArea_list.length = 0;
+            $.ajax({
+                url: "/api/app/VehicleController.ashx",
+                type: "POST",
+                dataType: "json",
+                data: { method: "GetServiceAreaByID", vehicleID: vehicleid },
+                error: function (XMLHttpRequest, textStatus, errorThrown) { },
+                success: function (resp) {
+                    if (resp.Code == "0") {
+                        serviceArea_list.length = 0;
+                        $.each(resp.Data, function (idx, item) {
+                            var pts = item.COORDINATES.split(";");
+                            item.points = new Array();
+                            for (var i = 0; i < pts.length; i++) {
+                                var latlng = new AMap.LngLat(pts[i].split(",")[0], pts[i].split(",")[1]);
+                                item.points.push(latlng);
+                            }
+                            serviceArea_list.push(item);
+                        });
+                        drawServiceArea(serviceArea_list);
+                    }
+                }
+            });
+        }
+
+        var serviceAreasOverlay = new Array();
+        function drawServiceArea(arealist) {
+            //map.remove(serviceAreasOverlay);
+            serviceAreasOverlay.length = 0;
+            $.each(arealist, function (idx, item) {
+                var serviceAreaOverlay = new AMap.Polygon({
+                    map: map,
+                    path: item.points,
+                    strokeColor: "#ff0000",
+                    strokeOpacity: 1,
+                    strokeWeight: 1,
+                    fillColor: "#ffffff",
+                    fillOpacity: 0,
+                    strokeStyle: "solid"
+                });
+            });
+        }
+
+        function Loading(visible)
+        {
+            if (visible) {
+                $.dialog({ id: 'dlg_loading', title:false,content: document.getElementById('dlg_loading'), lock: true,cancel:false });
+            }
+            else {
+                $.dialog.get('dlg_loading').close();
+            }
+        }
+
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return unescape(r[2]);
+            }
+            return "";
+        }
+    </script>
+
+</head>
+<body>
+    <div id="map"></div> 
+
+    <div id="dlg_loading" style="display:none;">
+        <img src="../../Themes/Images/loading.gif" />
+        <span style="font-size:18px;font-weight:bold;color:#003399">数据正在加载中......</span>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,257 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>设置范围</title>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css" />
+    <script src="http://webapi.amap.com/maps?v=1.3&key=657c7812bb692c34491866ad01ca5874&plugin=AMap.PolyEditor,AMap.CircleEditor,AMap.MapType"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <script src="/Themes/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="/Themes/Scripts/artDialog/artDialog.source.js" type="text/javascript"></script>
+    <script src="/Themes/Scripts/artDialog/iframeTools.source.js" type="text/javascript"></script>
+    <script src="/Themes/Scripts/FunctionJS.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="container"></div>
+    <div class="button-group">
+        <!--<input type="button" class="button" id="btnStartEdit" value="开始编辑" onClick="editor.startEditPolygon()" />-->
+        <input type="button" class="button" id="btnChangeLayer" value="切换图层" onclick="changeLayer()" />
+        <input type="button" class="button" id="btnCloseEdit" value="保存设置" onclick="editor.closeEditPolygon()" />
+    </div>
+    <script>
+        //var test="116.379933,39.932011;116.406069,39.932498;116.407441,39.907695;116.38092,39.907563";
+        var key, city = "北京", marker, center = [116.403322, 39.900255], isSatellite = false,type=1;
+        var arr = new Array();
+        var editorTool, map, editor = {};
+        var newAarray;
+        var markers = new Array();
+        $(function () {
+            type = getQueryString("type");
+            key = getQueryString("key");
+            if (getQueryString("city") != null)
+                city = getQueryString("city");
+            map = new AMap.Map("container", {
+                resizeEnable: true,
+                center: center,
+                zoom: 18
+            });
+            if (city != null) {
+                map.setCity(city, function () {
+                    //console.dir(map.getLayers());
+                    //layers: [new AMap.TileLayer.Satellite()],
+                    //{"state":"success","message":"获取数据成功","content":{"ServiceArea":[{"ID":"54a6ce76-64d2-44ff-887b-af54121f86a6","CITYID":"110100","COORDINATES":"","AREATYPE":"2","THISNAME":"民族园停车点","LONGITUDE":"","LATITUDE":"","DELETEMARK":"True","CREATETIME":"2017/5/23 10:59:18"}]}}
+                    $.ajax({
+                        url: "/Ajax/AjaxRequst.ashx",
+                        type: "POST",
+                        dataType: "json",
+                        data: { action: "GetServiceAreaByID", key: key },
+                        success: function (data, textStatus) {
+                            if (data.state == "success") {
+                                if (data.content.ServiceArea[0].AREATYPE != 1) {
+                                    loadServiceArea();
+                                }
+                                if (data.content.ServiceArea[0].LONGITUDE.length > 0 && data.content.ServiceArea[0].LATITUDE.length > 0) {
+                                    center[0] = data.content.ServiceArea[0].LONGITUDE;
+                                    center[1] = data.content.ServiceArea[0].LATITUDE;
+                                    map.setZoomAndCenter(16, center);
+                                    marker = new AMap.Marker({
+                                        icon: "http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+                                        position: center
+                                    });
+                                    marker.setMap(map);
+                                }
+                                if (data.content.ServiceArea[0].COORDINATES.length > 0) {
+                                    var tempArray = data.content.ServiceArea[0].COORDINATES.split(";");
+                                    arr = new Array();
+                                    for (var k = 0; k < tempArray.length; k++) {
+                                        arr[k] = new Array();
+                                        for (var j = 0; j < 2; j++) {
+                                            if (j == 0) {
+                                                arr[k][0] = tempArray[k].split(",")[0];
+                                            } else {
+                                                arr[k][1] = tempArray[k].split(",")[1];
+                                            }
+                                        }
+                                    }
+                                    initPolygon();
+                                } else {
+                                    map.on("dblclick", mapDbClick);
+                                    map.on("click", mapClick);
+                                }
+                            } else {
+                                showTipsMsg('操作失败，请稍后重试！', '5000', '5');
+                            }
+                        }
+                    });
+                });
+            }
+        })
+        function initPolygon() {
+            var color = "#F33",fillColor="#f5deb3";
+            if (type == 3) {
+                color = "#000000";
+                fillColor = "#778899";
+            }
+            editor._polygon = (function () {
+                return new AMap.Polygon({
+                    map: map,
+                    path: arr,
+                    strokeColor: color,
+                    strokeOpacity: 1,
+                    strokeWeight: 3,
+                    strokeStyle: "dashed",
+                    fillColor: fillColor,
+                    fillOpacity: 0.35
+                });
+            })();
+            map.setFitView();
+            editor._polygonEditor = new AMap.PolyEditor(map, editor._polygon);
+            editor._polygonEditor.open();
+            editor.startEditPolygon = function () {
+                editor._polygonEditor.open();
+            }
+            var data = [];
+            editor.closeEditPolygon = function () {
+                console.dir(editor._polygonEditor);
+                console.dir(editor._polygon.getPath());
+                var temp_data = editor._polygon.getPath();//editor._polygonEditor.Zk;
+                var str = "";
+                for (var i in temp_data) {
+                    if (!data[i]) {
+                        data[i] = [];
+                    }
+                    data[i]['lat'] = temp_data[i]['lat'];
+                    data[i]['lng'] = temp_data[i]['lng'];
+                    str += temp_data[i]['lng'] + "," + temp_data[i]['lat'] + ";";
+                }
+                center[0] = editor._polygon.getBounds().getCenter().lng;
+                center[1] = editor._polygon.getBounds().getCenter().lat;
+                map.setZoomAndCenter(16, center);
+                marker = new AMap.Marker({
+                    icon: "http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+                    position: center
+                });
+                marker.setMap(map);
+                //editor._polygonEditor.close();
+                var Longitude = center[0];
+                var Latitude = center[1];
+                var Coordinates = str.substr(0, str.lastIndexOf(";"));
+                $.ajax({
+                    url: "/Ajax/AjaxRequst.ashx",
+                    type: "POST",
+                    dataType: "json",
+                    data: { action: "UpdateServiceAreaCoordinates", key: key, Coordinates: Coordinates, Longitude: Longitude, Latitude: Latitude },
+                    success: function (data, textStatus) {
+                        if (data.state == "success") {
+                            showTipsMsg('操作成功', '2500', '4'); top.main.windowload(); OpenClose();
+                        } else {
+                            showTipsMsg('操作失败，请稍后重试！', '5000', '5');
+                        }
+                    }
+                });
+            }
+        }
+        function changeLayer() {
+            if (!isSatellite) {
+                map.setLayers([new AMap.TileLayer.Satellite()]);
+                isSatellite = true;
+            } else {
+                map.setLayers([new AMap.TileLayer()]);
+                isSatellite = false;
+            }
+        }
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+
+        function mapClick(e)
+        {
+            arr.push(e.lnglat);
+            var myIcon = new AMap.Icon({
+                image: "/Themes/Images/point.png",
+                imageSize: new AMap.Size(11, 11),
+                size: new AMap.Size(11, 11),
+                imageOffset: new AMap.Pixel(0, 0)
+            });
+            var marker = new AMap.Marker({
+                icon: myIcon,
+                position: e.lnglat,
+                offset:new AMap.Pixel(-6, -6),
+                map: map
+            });
+            marker.on("dblclick", function () {
+                initPolygon();
+                map.remove(markers);
+                markers.length = 0;
+                map.off("click", mapClick);
+                map.off("dblclick", mapDbClick);
+            });
+            markers.push(marker);
+        }
+
+        function mapDbClick(e)
+        {
+            arr.push(e.lnglat);
+            if (arr.length > 2) {
+                initPolygon();
+                map.remove(markers);
+                markers.length = 0;
+                map.off("click",mapClick);
+                map.off("dblclick", mapDbClick);
+            }
+        }
+
+        var serviceArea_list = new Array();
+        function loadServiceArea() {
+            serviceArea_list.length = 0;
+            $.ajax({
+                url: "/api/app/VehicleController.ashx",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    method: "GetServiceAreaByID", vehicleID: "24d76f1b-84c5-45d2-878c-04c0675a3c20"},
+                error: function (XMLHttpRequest, textStatus, errorThrown) { },
+                success: function (resp) {
+                    if (resp.Code == "0") {
+                        serviceArea_list.length = 0;
+                        $.each(resp.Data, function (idx, item) {
+                            var pts = item.COORDINATES.split(";");
+                            item.points = new Array();
+                            for (var i = 0; i < pts.length; i++) {
+                                var latlng = new AMap.LngLat(pts[i].split(",")[0], pts[i].split(",")[1]);
+                                item.points.push(latlng);
+                            }
+                            serviceArea_list.push(item);
+                        });
+                        drawServiceArea(serviceArea_list);
+                    }
+                }
+            });
+        }
+
+        var serviceAreasOverlay = new Array();
+        function drawServiceArea(arealist) {
+            //map.remove(serviceAreasOverlay);
+            serviceAreasOverlay.length = 0;
+            $.each(arealist, function (idx, item) {
+                var serviceAreaOverlay = new AMap.Polygon({
+                    map: map,
+                    path: item.points,
+                    strokeColor: "#ff0000",
+                    strokeOpacity: 1,
+                    strokeWeight: 2,
+		            bubble:true,	
+                    fillColor: "#ffffff",
+                    fillOpacity: 0,
+                    strokeStyle: "solid"
+                });
+            });
+        }
+
+    </script>
+</body>
+</html>

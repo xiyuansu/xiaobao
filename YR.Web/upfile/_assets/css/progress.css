@@ -1,0 +1,20 @@
+﻿.green .ajax__progress_indicator{background-image:url(../img/progress_green.gif);}  
+.yelllow .ajax__progress_indicator{background-image:url(../img/progress_yellow.gif);} 
+.orange .ajax__progress_indicator{background-image:url(../img/progress_orange.gif);} 
+.red .ajax__progress_indicator{background-image:url(../img/progress_red.gif);}    
+.solidblue .ajax__progress_indicator{background-image:url(../img/progress_solidblue.gif);} 
+.solidblue .ajax__progress_inner{border-color:#626562;}  
+.solidblue .ajax__progress_outer{border-color:#626562;}       
+.lightblue .ajax__progress_indicator{background-image:url(../img/progress_lightblue.gif);height:9px;}     
+.lightblue .ajax__progress_inner{background-image:url(../img/progress_bg_lightblue.gif);height:9px;} 
+.xp .ajax__progress_indicator{background-image:url(../img/xp.gif);height:9px;}     
+.xp .ajax__progress_inner{height:9px;} 
+.vista .ajax__progress_indicator{background-image:url(../img/vista.gif);}    
+.vista .ajax__progress_outer{text-align:left;border-top-color:#B2B2B2;border-bottom-color:#B2B2B2;}
+.vista .ajax__progress_inner{border-left-color:#B2B2B2;border-right-color:#B2B2B2;background-image:url(../img/vista_bg.gif);} 
+/* applied to the text while the progress is updating */
+.updating .ajax__progress_info{ color:#666; }.safari .ajax__progress_indicator{background-image:url(../img/safari.gif);height:12px;}    
+.safari .ajax__progress_outer{border-top-color:#696969;border-bottom-color:#696969;}
+.safari .ajax__progress_inner{border-left-color:#696969;border-right-color:#696969;background-image:url(../img/safari_bg.gif);height:12px;} 
+
+

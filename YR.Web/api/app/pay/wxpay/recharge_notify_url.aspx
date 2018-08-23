@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="recharge_notify_url.aspx.cs" Inherits="YR.Web.api.app.pay.wxpay.recharge_notify_url" %>

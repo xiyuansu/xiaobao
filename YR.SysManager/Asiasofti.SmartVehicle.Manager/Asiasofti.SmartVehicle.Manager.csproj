@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B092D1C5-A3DD-4EA1-9ACD-2D13818CA5E3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Asiasofti.SmartVehicle.Manager</RootNamespace>
+    <AssemblyName>Asiasofti.SmartVehicle.Manager</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\YR.Web\Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AreaManager.cs" />
+    <Compile Include="ArticleManager.cs" />
+    <Compile Include="BaoJiaManager.cs" />
+    <Compile Include="ChargingOrdersManager.cs" />
+    <Compile Include="ChargingPointsManager.cs" />
+    <Compile Include="DictManager.cs" />
+    <Compile Include="FeedbackManager.cs" />
+    <Compile Include="OPUserManager.cs" />
+    <Compile Include="IVehicleController.cs" />
+    <Compile Include="MessageReadLogManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RechargeCardManager.cs" />
+    <Compile Include="SmsInfoManager.cs" />
+    <Compile Include="SystemImagesManager.cs" />
+    <Compile Include="VehicleAlarmManager.cs" />
+    <Compile Include="UserCouponManager.cs" />
+    <Compile Include="XiaoAnVehicleController.cs" />
+    <Compile Include="UserBankCardManager.cs" />
+    <Compile Include="UserFinancialManager.cs" />
+    <Compile Include="SysSettingManager.cs" />
+    <Compile Include="UserInfoManager.cs" />
+    <Compile Include="UserLoginLogManager.cs" />
+    <Compile Include="UserOrderVehicleManager.cs" />
+    <Compile Include="UserRaiseReplyManager.cs" />
+    <Compile Include="UserRaiseWithdrawalManager.cs" />
+    <Compile Include="VehicleHistoryManager.cs" />
+    <Compile Include="PlatformManager.cs" />
+    <Compile Include="CustomerManager.cs" />
+    <Compile Include="ServiceStationManager.cs" />
+    <Compile Include="VehicleManager.cs" />
+    <Compile Include="MessageManager.cs" />
+    <Compile Include="AddressManager.cs" />
+    <Compile Include="OrdersManager.cs" />
+    <Compile Include="VehicleDriveLogManager.cs" />
+    <Compile Include="VehicleMaintainLogManager.cs" />
+    <Compile Include="VehicleCommentsLogManager.cs" />
+    <Compile Include="ServiceAreaManager.cs" />
+    <Compile Include="PitsManager.cs" />
+    <Compile Include="UserRaiseFinancialManager.cs" />
+    <Compile Include="VehicleFaultManager.cs" />
+    <Compile Include="RechargeRules.cs" />
+    <Compile Include="DepositReturnManager.cs" />
+    <Compile Include="VehicleModelManager.cs" />
+    <Compile Include="VehiclePriceManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\YR.Busines\YR.Busines.csproj">
+      <Project>{38634ADE-3E03-4EA2-A43B-22805528CB5C}</Project>
+      <Name>YR.Busines</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\YR.Common\YR.Common.csproj">
+      <Project>{4AF69D49-B0E8-4041-905D-0ABE81C53932}</Project>
+      <Name>YR.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\YR.DataBase\YR.DataBase.csproj">
+      <Project>{1760F15B-E3C4-4A2F-A73A-9B33A61F8F1E}</Project>
+      <Name>YR.DataBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Asiasofti.SmartVehicle.Common\Asiasofti.SmartVehicle.Common.csproj">
+      <Project>{91B04486-9909-4545-B40E-89D567A09228}</Project>
+      <Name>Asiasofti.SmartVehicle.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
