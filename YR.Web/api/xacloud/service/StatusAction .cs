@@ -14,7 +14,7 @@ namespace YR.Web.api.xacloud.service
     //测试
     /// <summary>
     /// 状态信息
-    /// {"distance":6315.7,"data":[{"acc":"1","wheel":"0","latitude":39.97863006591797,"locationType":0,"gpsTime":1498880904,"speed":0,"seat":"1","defend":"0","course":346,"power":"1","longitude":116.38182067871094}],"sign":"ae65f09315d08bf2011c64d8b86764eb","cmd":"status","time":1498880918082,"carId":"865067025282255"}
+    /// {"distance":6315.7,"data":[{"acc":"1","wheel":"0","latitude":39.97863006591797,"locationType":0,"gpsTime":1498880904,"speed":0,"seat":"1","defend":"0","course":346,"power":"1","longitude":116.38182067871094}],"sign":"ae65f09315d08bf2011c64d8b86764eb","cmd":"status","time":1498880918082,"carId":"867717038875796"}
     /// </summary>
     public class StatusAction : IApiAction
     {
@@ -168,19 +168,27 @@ namespace YR.Web.api.xacloud.service
                                 {
                                     result = vm.AddOrEditVehicleInfo(ht, vid);
                                 }
-                                /*
+
                                 string cacheKey = "Out_Area_" + carId;
                                 string cacheValue = "";
                                 cache = CacheFactory.GetCache();
                                 cacheValue = cache.Get<string>(cacheKey);
                                 if (string.IsNullOrEmpty(cacheValue) && latitude > 0 && longitude > 0)
                                 {
-                                    ServiceAreaManager areaManager = new ServiceAreaManager();
-                                    Hashtable area_ht = areaManager.GetServiceAreaByVehicleID(vid);
-                                    if (area_ht != null && area_ht.Keys.Count > 0)
+                                    cacheKey = "ServiceArea_" + vehicle_ht["CITYID"].ToString();
+                                    string coordinates = cache.Get<string>(cacheKey);
+                                    if (string.IsNullOrEmpty(coordinates))
                                     {
-                                        List<LatLng> area_pts = new List<LatLng>();
-                                        string coordinates = SiteHelper.GetHashTableValueByKey(area_ht, "Coordinates");
+                                        ServiceAreaManager areaManager = new ServiceAreaManager();
+                                        Hashtable area_ht = areaManager.GetServiceAreaByVehicleID(vid);
+                                        if (area_ht != null && area_ht.Keys.Count > 0)
+                                        {
+                                            coordinates = SiteHelper.GetHashTableValueByKey(area_ht, "Coordinates");
+                                        }
+                                    }
+                                    List<LatLng> area_pts = new List<LatLng>();
+                                    if (!string.IsNullOrEmpty(coordinates))
+                                    {
                                         foreach (string str in coordinates.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
                                         {
                                             string[] pt_arr = str.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
@@ -220,7 +228,7 @@ namespace YR.Web.api.xacloud.service
                                             }
                                         }
                                     }
-                                }*/
+                                }
 
                                 if (cache != null)
                                 {

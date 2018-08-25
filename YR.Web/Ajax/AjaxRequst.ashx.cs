@@ -8,6 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.SessionState;
+using YR.Common.DotNetCache;
 using YR.Common.DotNetJson;
 using YR.Common.DotNetLog;
 
@@ -47,6 +48,42 @@ namespace YR.Web.Ajax
                     ht["COORDINATES"] = context.Request["Coordinates"];
                     ht["LONGITUDE"] = context.Request["Longitude"];
                     ht["LATITUDE"] = context.Request["Latitude"];
+                    string areaType = ht["AREATYPE"].ToString();
+                    string status = ht["STATUS"].ToString();
+                    string deleteMark = ht["DELETEMARK"].ToString();
+                    //AreaType 区域类型 1服务范围 2停车网点
+                    //Status 启动状态:0禁用,1启用
+                    //DeleteMark 0
+                    if ("1".Equals(areaType) && "1".Equals(status) && "True".Equals(deleteMark))
+                    {
+                        ICache cache = null;
+                        try
+                        {
+                            cache = CacheFactory.GetCache();
+                            string cacheKey = "ServiceArea_" + ht["CITYID"].ToString();
+                            cache.Set(cacheKey, context.Request["Coordinates"]);
+
+                            List<LatLng> area_pts = new List<LatLng>();
+                            string coordinates = cache.Get<string>(cacheKey);
+                            if(coordinates!=null&& coordinates.Length>0)
+                            foreach (string str in coordinates.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
+                            {
+                                string[] pt_arr = str.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                                LatLng pt = new LatLng(double.Parse(pt_arr[1]), double.Parse(pt_arr[0]));
+                                area_pts.Add(pt);
+                            }
+
+                            cache.Dispose();
+                        }
+                        catch (Exception e)
+                        {
+                            if (cache != null)
+                            {
+                                cache.Dispose();
+                            }
+                            Logger.Error("更新区域:" + ht["THISNAME"].ToString() + "报错:" + e.Message);
+                        }
+                    }
                     if (sam.AddOrEditInfo(ht, key))
                     {
                         context.Response.Write(JsonHelper.DataTableToJson("success", "更新成功", null, "UpdateServiceAreaCoordinates"));

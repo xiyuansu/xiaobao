@@ -7,7 +7,7 @@
   </processing-directives>
 
   <schedule>
-
+    <!--
 	  <job>
 		  <name>OrderPayQuery_Job</name>
 		  <group>OrdersGroup</group>
@@ -56,9 +56,9 @@
 			  <repeat-count>-1</repeat-count>
 			  <repeat-interval>60000</repeat-interval>
 		  </simple>
-	  </trigger>
+	  </trigger>-->
 
-	  <!--<job>
+    <!--<job>
 		  <name>NoOrderLock_Job</name>
 		  <group>OrdersGroup</group>
 		  <description>无单车并进行锁车</description>
@@ -79,7 +79,7 @@
 			  <repeat-interval>600000</repeat-interval>
 		  </simple>
 	  </trigger>-->
-    
+
     <!--<job>
 		  <name>NoOrderMove_Job</name>
 		  <group>OrdersGroup</group>
@@ -146,6 +146,7 @@
       </simple>
     </trigger>-->
 
+    <!--
     <job>
       <name>ReturnVehicleSendMessage_Job</name>
       <group>OrdersGroup</group>
@@ -166,7 +167,7 @@
         <repeat-count>-1</repeat-count>
         <repeat-interval>1800000</repeat-interval>
       </simple>
-    </trigger>
+    </trigger>-->
 
     <!--<job>
 		  <name>ReturnVehicleNotify_Job</name>
@@ -199,7 +200,7 @@
 			  <repeat-interval>900000</repeat-interval>
 		  </simple>
 	  </trigger>-->
-  
+
   </schedule>
 
 </job-scheduling-data>
