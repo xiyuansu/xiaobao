@@ -223,7 +223,16 @@ namespace Asiasofti.SmartVehicle.Manager
         {
             IList<SqlParam> IList_param = new List<SqlParam>();
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select ID,ThisName,Coordinates,Longitude,Latitude,Distance from (select ID,ThisName,Coordinates,Longitude,Latitude,dbo.fnGetDistance(Latitude,Longitude,'" + latitude + "','" + longitude + "') as Distance from YR_ServiceArea where DeleteMark=1 and AreaType=2 and Status=1 and Longitude is not null and Latitude is not null and cityid in(select CityID FROM YR_Vehicles where id='" + vid + "')) as Parking where Distance<5.00 order by Distance asc");
+            strSql.Append("select top 3 ID,ThisName,Coordinates,Longitude,Latitude,Distance from (select ID,ThisName,Coordinates,Longitude,Latitude,dbo.fnGetDistance(Latitude,Longitude,'" + latitude + "','" + longitude + "') as Distance from YR_ServiceArea where DeleteMark=1 and AreaType=2 and Status=1 and Longitude is not null and Latitude is not null and cityid in(select CityID FROM YR_Vehicles where id='" + vid + "')) as Parking where Distance<5.00 order by Distance asc");
+            DataTable dt = DataFactory.SqlDataBase().GetDataTableBySQL(strSql);
+            return dt;
+        }
+
+        public DataTable GetNearestParkingsByCity(string longitude, string latitude, string cityId)
+        {
+            IList<SqlParam> IList_param = new List<SqlParam>();
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select top 3 ID,ThisName,Coordinates,Longitude,Latitude,dbo.fnGetDistance(Latitude,Longitude,'" + latitude + "','" + longitude + "') as Distance from YR_ServiceArea where DeleteMark=1 and AreaType=2 and Status=1 and Longitude is not null and Latitude is not null and cityid='" + cityId + "' and dbo.fnGetDistance(Latitude,Longitude,'" + latitude + "','" + longitude + "')<5.00 order by Distance asc");
             DataTable dt = DataFactory.SqlDataBase().GetDataTableBySQL(strSql);
             return dt;
         }

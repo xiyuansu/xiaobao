@@ -1,17 +1,11 @@
 ﻿using Asiasofti.SmartVehicle.Common;
 using Asiasofti.SmartVehicle.Manager;
-using cn.jpush.api;
-using cn.jpush.api.push;
-using cn.jpush.api.push.mode;
 using Quartz;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Web;
 using YR.Common.DotNetCache;
-using YR.Common.DotNetCode;
 using YR.Common.DotNetConfig;
 using YR.Common.DotNetLog;
 using YR.Web.App_Code;
@@ -36,79 +30,84 @@ namespace YR.Web.jobs
             {
                 int minutes_timeout = 60;
                 List<string> saasList = ConfigHelper.GetSaasList();
+                int i = 0;
                 foreach (string saas in saasList)
                 {
-                    ICache cache = null;
-                    try
+                    if (i == 0)
                     {
-                        MyWorkerRequest.CreateHttpContext(saas, "", "");
-                        OrdersManager om = new OrdersManager();
-                        VehicleManager vm = new VehicleManager();
-                        //DataTable dt = om.GetVehicleReturnOrderList(minutes_timeout);
-                        DataTable dt = vm.GetInUseVehicles();
-                        Logger.Debug(string.Format("开始车辆还车通知任务，车辆数：{0}，saas：{1}", dt.Rows.Count, saas));
-                        UserInfoManager um = new UserInfoManager();
-                        SmsInfoManager sim = new SmsInfoManager();
-                        cache = CacheFactory.GetCache();
-                        foreach (DataRow dr in dt.Rows)
+                        ICache cache = null;
+                        try
                         {
-                            string vehicleID = dr["ID"].ToString();
-                            string lockState = dr["LockState"].ToString();
-                            string vehicleName = dr["VehicleName"].ToString();
-                            //string userID = dr["UserID"].ToString();
-                            //string orderNum = dr["OrderNum"].ToString();
-                            if (!string.IsNullOrEmpty(vehicleID))
+                            MyWorkerRequest.CreateHttpContext(saas, "", "");
+                            OrdersManager om = new OrdersManager();
+                            VehicleManager vm = new VehicleManager();
+                            //DataTable dt = om.GetVehicleReturnOrderList(minutes_timeout);
+                            DataTable dt = vm.GetInUseVehicles();
+                            Logger.Debug(string.Format("开始车辆还车通知任务，车辆数：{0}，saas：{1}", dt.Rows.Count, saas));
+                            UserInfoManager um = new UserInfoManager();
+                            SmsInfoManager sim = new SmsInfoManager();
+                            cache = CacheFactory.GetCache();
+                            foreach (DataRow dr in dt.Rows)
                             {
-                                //Hashtable htVehicle = vm.GetVehicleInfoByID(vehicleID);
-                                Hashtable htOrder = vm.GetVehicleInfoByID(vehicleID);
-                                if (htOrder != null)
+                                string vehicleID = dr["ID"].ToString();
+                                string lockState = dr["LockState"].ToString();
+                                string vehicleName = dr["VehicleName"].ToString();
+                                //string userID = dr["UserID"].ToString();
+                                //string orderNum = dr["OrderNum"].ToString();
+                                if (!string.IsNullOrEmpty(vehicleID))
                                 {
-                                    string userID = SiteHelper.GetHashTableValueByKey(htOrder, "UserID");
-                                    //string lockState = SiteHelper.GetHashTableValueByKey(htVehicle, "LockState");
-                                    //string vehicleName = SiteHelper.GetHashTableValueByKey(htVehicle, "VehicleName");
-                                    string orderNum = SiteHelper.GetHashTableValueByKey(htOrder, "OrderNum");
-                                    string createTimeStr = SiteHelper.GetHashTableValueByKey(htOrder, "CreateTime");
-                                    DateTime createTime = DateTime.Parse(createTimeStr);
-                                    TimeSpan span = DateTime.Now - createTime;
-                                    if ("lock".Equals(lockState) && span.TotalMinutes > minutes_timeout)
+                                    //Hashtable htVehicle = vm.GetVehicleInfoByID(vehicleID);
+                                    Hashtable htOrder = om.GetInUseOrder(vehicleID);
+                                    if (htOrder != null)
                                     {
-                                        Hashtable htUser = um.GetUserInfoByUserID(userID);
-                                        if (htUser != null)
+                                        string userID = SiteHelper.GetHashTableValueByKey(htOrder, "UserID");
+                                        //string lockState = SiteHelper.GetHashTableValueByKey(htVehicle, "LockState");
+                                        //string vehicleName = SiteHelper.GetHashTableValueByKey(htVehicle, "VehicleName");
+                                        string orderNum = SiteHelper.GetHashTableValueByKey(htOrder, "OrderNum");
+                                        string createTimeStr = SiteHelper.GetHashTableValueByKey(htOrder, "CreateTime");
+                                        DateTime createTime = DateTime.Parse(createTimeStr);
+                                        TimeSpan span = DateTime.Now - createTime;
+                                        if ("lock".Equals(lockState) && span.TotalMinutes > minutes_timeout)
                                         {
-                                            string mobile = SiteHelper.GetHashTableValueByKey(htUser, "BindPhone");
-                                            string key = "Return_Vehicle_Message_" + mobile + "_" + vehicleID;
-                                            string code_value = cache.Get<string>(key);
-                                            if (string.IsNullOrEmpty(code_value))
+                                            Hashtable htUser = um.GetUserInfoByUserID(userID);
+                                            if (htUser != null)
                                             {
-                                                bool sendResult = sim.SendReturn(mobile);
-                                                if (sendResult)
+                                                string mobile = SiteHelper.GetHashTableValueByKey(htUser, "BindPhone");
+                                                string key = "Return_Vehicle_Message_" + mobile + "_" + vehicleID;
+                                                string code_value = cache.Get<string>(key);
+                                                if (string.IsNullOrEmpty(code_value))
                                                 {
-                                                    Logger.Warn(string.Format("订单号{0}，车辆{1}还车提醒，发送给{2}成功。", orderNum, vehicleName, mobile));
-                                                    DateTime dtDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
-                                                    cache.Set(key, 1, dtDay - DateTime.Now);
-                                                }
-                                                else
-                                                {
-                                                    Logger.Error(string.Format("订单号{0}，车辆{1}还车提醒，发送给{2}失败。", orderNum, vehicleName, mobile));
+                                                    bool sendResult = sim.SendReturn(mobile);
+                                                    if (sendResult)
+                                                    {
+                                                        Logger.Warn(string.Format("订单号{0}，车辆{1}还车提醒，发送给{2}成功。", orderNum, vehicleName, mobile));
+                                                        DateTime dtDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
+                                                        cache.Set(key, 1, dtDay - DateTime.Now);
+                                                    }
+                                                    else
+                                                    {
+                                                        Logger.Error(string.Format("订单号{0}，车辆{1}还车提醒，发送给{2}失败。", orderNum, vehicleName, mobile));
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
+                            if (cache != null)
+                            {
+                                cache.Dispose();
+                            }
                         }
-                        if (cache != null)
+                        catch (Exception e)
                         {
-                            cache.Dispose();
+                            if (cache != null)
+                            {
+                                cache.Dispose();
+                            }
+                            Logger.Error(string.Format("车辆还车通知任务(ReturnVehicleSendMessage：{0})失败，{1}，{2}", saas, e.Message, e.StackTrace));
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        if (cache != null)
-                        {
-                            cache.Dispose();
-                        }
-                        Logger.Error(string.Format("车辆还车通知任务(ReturnVehicleSendMessage：{0})失败，{1}，{2}", saas, e.Message, e.StackTrace));
+                        i++;
                     }
                 }
             }

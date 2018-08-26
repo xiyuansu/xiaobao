@@ -44,20 +44,25 @@ namespace YR.Web.api.app.privacy
             }
             string code = res["LoginCode"].ToString().Trim();
             code = code.ToLower();
-            ICache Cache = CacheFactory.GetCache();
+            ICache cache = CacheFactory.GetCache();
             string key = "login_code@" + mobile;
-            string code_value = Cache.Get<string>(key);
-            if(string.IsNullOrEmpty(code_value))
+            string code_value = cache.Get<string>(key);
+            Logger.Debug("mobile:" + mobile + ",code:" + code + ",redis_code_value:" + code_value);
+            /*if(string.IsNullOrEmpty(code_value))
             {
                 return SiteHelper.GetJsonFromHashTable(null, "faild", "图形码超时");
             }
             if (!code_value.Equals(code))
             {
                 return SiteHelper.GetJsonFromHashTable(null, "faild", "图形码错误");
-            }
+            }*/
 
             if (!ValidateUtil.IsMobilePhone(mobile))
             {
+                if (cache != null)
+                {
+                    cache.Dispose();
+                }
                 return SiteHelper.GetJsonFromHashTable(null, "faild", "手机格式不正确");
             }
 
@@ -71,6 +76,10 @@ namespace YR.Web.api.app.privacy
                     Hashtable hashuser = DataTableHelper.DataRowToHashTable(user.Rows[0]);
                     if (SiteHelper.GetHashTableValueByKey(hashuser, "UserState").Trim() == UserState.Disable.GetHashCode().ToString())
                     {
+                        if (cache != null)
+                        {
+                            cache.Dispose();
+                        }
                         return SiteHelper.GetJsonFromHashTable(null, "faild", "用户被禁用,无法收取验证码");
                     }
                 }
@@ -91,19 +100,22 @@ namespace YR.Web.api.app.privacy
 
             string keyid = "sms_send_times@" + mobile;
             int sms_send_times = 0;
-            if (string.IsNullOrEmpty(Cache.Get<string>(keyid)))
+            if (string.IsNullOrEmpty(cache.Get<string>(keyid)))
             {
                 DateTime dt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
-                Cache.Set(keyid, sms_send_times, dt - DateTime.Now);
+                cache.Set(keyid, sms_send_times, dt - DateTime.Now);
             }
             else
             {
-                string tims = Cache.Get<string>(keyid);
+                string tims = cache.Get<string>(keyid);
                 int.TryParse(tims, out sms_send_times);
             }
             if (sms_send_times >= MaxSendTimes)
             {
-                Cache.Dispose();
+                if (cache != null)
+                {
+                    cache.Dispose();
+                }
                 return SiteHelper.GetJsonFromHashTable(null, "faild", "短信发送失败,短信发送已超过当天最大次数");
             }
 
@@ -112,13 +124,16 @@ namespace YR.Web.api.app.privacy
             {
                 sms_send_times += 1;
                 DateTime dt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
-                Cache.Set(keyid, sms_send_times, dt - DateTime.Now);
-                Cache.Dispose();
+                cache.Set(keyid, sms_send_times, dt - DateTime.Now);
+                cache.Dispose();
                 return SiteHelper.GetJsonFromHashTable(null, "success", "短信发送成功");
             }
             else
             {
-                Cache.Dispose();
+                if (cache != null)
+                {
+                    cache.Dispose();
+                }
                 return SiteHelper.GetJsonFromHashTable(null, "faild", "短信发送失败");
             }
         }

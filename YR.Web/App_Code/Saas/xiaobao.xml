@@ -85,6 +85,7 @@
 
 	<!--Redis配置-->
   <!--<add key="redis_db" value="111.74.59.199:6379,ssl=false,password=redis#jieming@2017,defaultDatabase=0"/>-->
+  <!--<add key="redis_db" value="111.74.59.199:6379,ssl=false,password=redis#jieming@2017,defaultDatabase=0"/>-->
   <add key="redis_db" value="39.106.206.102:6379,ssl=false,defaultDatabase=0"/>
 	
 	<!--RabbitMQ配置-->

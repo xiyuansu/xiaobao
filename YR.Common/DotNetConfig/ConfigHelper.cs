@@ -37,7 +37,6 @@ namespace YR.Common.DotNetConfig
             if (HttpContext.Current != null)
                 host = HttpContext.Current.Request.Url.Host;
             path = GetConfigFile(host);
-            //Logger.Error("host:" + host+",path:"+ path);
             string value = "";
             XmlDocument xml = new XmlDocument();
             xml.Load(path);
@@ -46,6 +45,7 @@ namespace YR.Common.DotNetConfig
             {
                 value = node.Attributes["value"].Value;
             }
+            //Logger.Debug("host:" + host + ",path:" + path+",key:"+key+",value:"+value);
             return value;
         }
 

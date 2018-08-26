@@ -38,15 +38,22 @@ namespace YR.Web.api.app.privacy
             {
                 uid = res["UID"].ToString().Trim();
                 if (res["Longitude"] != null && res["Longitude"].ToString().Trim().Length > 0)
+                {
                     userLng = res["Longitude"].ToString().Trim();
+                }
                 if (res["Latitude"] != null && res["Latitude"].ToString().Trim().Length > 0)
+                {
                     userLat = res["Latitude"].ToString().Trim();
+                }
                 cacheKey += uid;
                 ICache cache = null;
                 cache = CacheFactory.GetCache();
                 if (!string.IsNullOrEmpty(cache.Get<string>(cacheKey)))
                 {
-                    cache.Dispose();
+                    if (cache != null)
+                    {
+                        cache.Dispose();
+                    }
                     Logger.Error("还车10秒内，" + uid);
                     return SiteHelper.GetJsonFromHashTable(null, "faild", "还车处理中，请勿重复点击");
                 }
@@ -54,12 +61,12 @@ namespace YR.Web.api.app.privacy
                 {
                     DateTime dt = DateTime.Now.AddSeconds(10);
                     cache.Set(cacheKey, uid, dt - DateTime.Now);
-                    cache.Dispose();
+                    //cache.Dispose();
                 }
-                if (cache != null)
-                {
-                    cache.Dispose();
-                }
+                /*if (cache != null)
+                 {
+                     cache.Dispose();
+                 }*/
                 UserInfoManager uim = new UserInfoManager();
                 OrdersManager om = new OrdersManager();
                 VehicleManager vm = new VehicleManager();
@@ -69,6 +76,10 @@ namespace YR.Web.api.app.privacy
                 //判断是否有车
                 if (order == null)
                 {
+                    if (cache != null)
+                    {
+                        cache.Dispose();
+                    }
                     return SiteHelper.GetJsonFromHashTable(null, "faild", "您没有车辆无法还车");
                 }
                 else
@@ -76,6 +87,7 @@ namespace YR.Web.api.app.privacy
                     //车辆坐标
                     string longitude = SiteHelper.GetHashTableValueByKey(order, "Longitude");
                     string latitude = SiteHelper.GetHashTableValueByKey(order, "Latitude");
+                    string orderNum = SiteHelper.GetHashTableValueByKey(order, "OrderNum");
 
                     Hashtable userht = uim.GetUserInfoByUserID(uid);
                     decimal balance = 0.00m, raiseBalance = 0.00m;
@@ -84,6 +96,10 @@ namespace YR.Web.api.app.privacy
                     //处理订单
                     if (order == null)
                     {
+                        if (cache != null)
+                        {
+                            cache.Dispose();
+                        }
                         return SiteHelper.GetJsonFromHashTable(null, "faild", "还车操作失败,请联系管理员");
                     }
                     else
@@ -125,13 +141,38 @@ namespace YR.Web.api.app.privacy
                         //车辆GPS坐标转高德坐标
                         vehicle_pt = SiteHelper.GPSToGCJ02(longitude, latitude);
                         vehicle_pt = new LatLng(Math.Round(vehicle_pt.latitude, 6), Math.Round(vehicle_pt.longitude, 6));
-                        Hashtable area_ht = areaManager.GetServiceAreaByVehicleID(SiteHelper.GetHashTableValueByKey(order, "VID"));
+
+                        string cityCacheKey = "Vehicle_City_" + SiteHelper.GetHashTableValueByKey(order, "VID");
+                        string cityId = cache.Get<string>(cityCacheKey);
+                        if (string.IsNullOrEmpty(cityId))
+                        {
+                            Hashtable vehicle_ht = vm.GetVehicleInfoByID(SiteHelper.GetHashTableValueByKey(order, "VID"));
+                            cityId = vehicle_ht["CITYID"].ToString();
+                            DateTime timeSpan = DateTime.Now.AddHours(2);
+                            cache.Set(cityCacheKey, cityId, timeSpan - DateTime.Now);
+                        }
+
+                        string serviceAreaKey = "Service_Area_" + cityId;
+                        string coordinates = cache.Get<string>(serviceAreaKey);
+                        if (string.IsNullOrEmpty(coordinates))
+                        {
+                            Hashtable area_ht = areaManager.GetServiceAreaByVehicleID(SiteHelper.GetHashTableValueByKey(order, "VID"));
+                            if (area_ht != null && area_ht.Keys.Count > 0)
+                            {
+                                coordinates = SiteHelper.GetHashTableValueByKey(area_ht, "Coordinates");
+                                if (!string.IsNullOrEmpty(coordinates))
+                                {
+                                    DateTime timeSpan = DateTime.Now.AddDays(10);
+                                    cache.Set(serviceAreaKey, coordinates, timeSpan - DateTime.Now);
+                                }
+                            }
+                        }
+
                         List<LatLng> area_pts = new List<LatLng>();
                         bool isInPoly = true;
                         string outServiceAreaReturn = settingManager.GetValueByKey("OutServiceAreaReturn");
-                        if (area_ht != null && area_ht.Keys.Count > 0)
+                        if (!string.IsNullOrEmpty(coordinates))
                         {
-                            string coordinates = SiteHelper.GetHashTableValueByKey(area_ht, "Coordinates");
                             foreach (string str in coordinates.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
                             {
                                 string[] pt_arr = str.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
@@ -141,7 +182,11 @@ namespace YR.Web.api.app.privacy
                             isInPoly = SiteHelper.IsPtInPoly(vehicle_pt, area_pts);
                             if (!isInPoly && "0".Equals(outServiceAreaReturn))
                             {
-                                Logger.Info("用户:" + uid + ",订单ID:" + SiteHelper.GetHashTableValueByKey(order, "OrderID") + ",在运营区域外被禁止还车");
+                                if (cache != null)
+                                {
+                                    cache.Dispose();
+                                }
+                                Logger.Info("用户:" + uid + ",订单:" + orderNum + ",在运营区域外被禁止还车");
                                 return SiteHelper.GetJsonFromHashTable(null, "faild", "运营区域外禁止还车,请骑回运营区域再还车");
                             }
                         }
@@ -151,7 +196,7 @@ namespace YR.Web.api.app.privacy
                         bool isSuccess = vm.CloseVehicle(SiteHelper.GetHashTableValueByKey(order, "VID"));
                         if (!isSuccess)
                         {
-                            Logger.Error("用户:" + uid + ",订单ID:" + SiteHelper.GetHashTableValueByKey(order, "OrderID") + ",还车锁车失败:" + gpsnum);
+                            Logger.Error("用户:" + uid + ",订单:" + orderNum + ",还车锁车失败:" + gpsnum);
                         }
                         VehiclePriceManager priceManager = new VehiclePriceManager();
                         Hashtable billing_ht = priceManager.GetOrderSettlement(SiteHelper.GetHashTableValueByKey(order, "OrderID"));
@@ -163,12 +208,12 @@ namespace YR.Web.api.app.privacy
                         SettlementMoney = TotalMoney;
 
                         #region 判断还车点是否在运营区域内，运营区域外加收费用
-                        if (TotalMoney > 0 && area_ht != null && area_ht.Keys.Count > 0)
+                        if (TotalMoney > 0 && !string.IsNullOrEmpty(coordinates))
                         {
                             returnLocType = "03";
                             //bool isInPoly = SiteHelper.IsPtInPoly(vehicle_pt, area_pts);
                             string vehicleInArea = isInPoly ? "在运营区域内还车" : "在运营区域外还车";
-                            Logger.Info("用户:" + uid + ",订单ID:" + SiteHelper.GetHashTableValueByKey(order, "OrderID") + "," + vehicleInArea + "车辆GPS坐标:" + longitude + "," + latitude + ",高德坐标:" + vehicle_pt.longitude + "," + vehicle_pt.latitude);
+                            Logger.Info("用户:" + uid + ",订单:" + SiteHelper.GetHashTableValueByKey(order, "OrderID") + "," + vehicleInArea + "车辆GPS坐标:" + longitude + "," + latitude + ",高德坐标:" + vehicle_pt.longitude + "," + vehicle_pt.latitude);
                             bool isInPoly2 = false;//用户坐标是否在区域内
                             if (!string.IsNullOrEmpty(userLng) && !string.IsNullOrEmpty(userLat))
                             {
@@ -195,7 +240,7 @@ namespace YR.Web.api.app.privacy
                                     TotalMoney = TotalMoney * outServiceAreaFee;
                                 }
                                 outServiceAreaFee = TotalMoney - SettlementMoney;
-                                Logger.Info("订单ID: " + SiteHelper.GetHashTableValueByKey(order, "OrderID") + ",加收调度费值:" + serviceFee + ",加收调度费金额:" + outServiceAreaFee);
+                                Logger.Info("订单: " + orderNum + ",加收调度费值:" + serviceFee + ",加收调度费金额:" + outServiceAreaFee);
                             }
                         }
                         #endregion
@@ -205,7 +250,7 @@ namespace YR.Web.api.app.privacy
                         if (TotalMoney > 0 && outServiceAreaFee == 0 && returnVehicleMode == "1")
                         {
                             returnLocType = "01";
-                            DataTable parking_dt = areaManager.GetNearestParkingList(vehicle_pt.longitude.ToString(), vehicle_pt.latitude.ToString(), SiteHelper.GetHashTableValueByKey(order, "VID"));
+                            DataTable parking_dt = areaManager.GetNearestParkingsByCity(vehicle_pt.longitude.ToString(), vehicle_pt.latitude.ToString(), cityId);
                             if (parking_dt != null)
                             {
                                 //bool isInPoly = false;
@@ -214,7 +259,7 @@ namespace YR.Web.api.app.privacy
                                 {
                                     List<LatLng> parking_pts = new List<LatLng>();
                                     returnParkingID = dr["ID"].ToString();
-                                    string coordinates = dr["Coordinates"].ToString();
+                                    coordinates = dr["Coordinates"].ToString();
                                     foreach (string str in coordinates.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
                                     {
                                         string[] pt_arr = str.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
@@ -230,7 +275,7 @@ namespace YR.Web.api.app.privacy
 
                                     string vehicleInArea = isInPoly ? "在停车点内还车" : "在停车点外还车";
                                     string userInArea = isInPoly2 ? "用户在停车点内" : "用户在停车点外";
-                                    Logger.Info("用户:" + uid + ",订单ID:" + SiteHelper.GetHashTableValueByKey(order, "OrderID") + "," + vehicleInArea + ",车辆GPS坐标:" + longitude + "," + latitude + ",高德坐标:" + vehicle_pt.longitude + "," + vehicle_pt.latitude + ",用户高德坐标:" + userLng + "," + userLat + "," + userInArea);
+                                    Logger.Info("用户:" + uid + ",订单:" + orderNum + "," + vehicleInArea + ",车辆GPS坐标:" + longitude + "," + latitude + ",高德坐标:" + vehicle_pt.longitude + "," + vehicle_pt.latitude + ",用户高德坐标:" + userLng + "," + userLat + "," + userInArea);
                                     if (isInPoly || isInPoly2)
                                     {
                                         break;
@@ -254,14 +299,13 @@ namespace YR.Web.api.app.privacy
                                         TotalMoney = TotalMoney * outServiceAreaFee;
                                     }
                                     outServiceAreaFee = TotalMoney - SettlementMoney;
-                                    Logger.Info("用户:" + uid + ",订单ID:" + SiteHelper.GetHashTableValueByKey(order, "OrderID") + "加收调度费值:" + serviceFee + ",加收调度费金额:" + outServiceAreaFee);
+                                    Logger.Info("用户:" + uid + ",订单:" + orderNum + "加收调度费值:" + serviceFee + ",加收调度费金额:" + outServiceAreaFee);
                                 }
                             }
                         }
                         #endregion
 
                         payMoney = TotalMoney;
-
                         Hashtable userParm = new Hashtable();
                         userParm["VID"] = SiteHelper.GetHashTableValueByKey(order, "VID");
                         userParm["OrderNum"] = SiteHelper.GetHashTableValueByKey(order, "OrderNum");
@@ -289,14 +333,15 @@ namespace YR.Web.api.app.privacy
                         userParm["OutServiceAreaFee"] = (int)outServiceAreaFee;
                         userParm["ReturnParkingID"] = returnParkingID;
                         userParm["ReturnLocType"] = returnLocType;
-
+                        if (cache != null)
+                        {
+                            cache.Dispose();
+                        }
                         bool isSettlementSuccess = uim.ReturnVehicle(userParm);
                         if (isSettlementSuccess)
                         {
                             om.UpdateOrderGPS(SiteHelper.GetHashTableValueByKey(order, "orderid"), false);
-
                             Hashtable ht = om.GetOrderByNum(SiteHelper.GetHashTableValueByKey(order, "OrderNum"));
-
                             return SiteHelper.GetJsonFromHashTable(ht, "success", "还车成功", "OrderInfo");
                         }
                         else

@@ -7,11 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using YR.Common.DotNetConfig;
+using YR.Common.DotNetLog;
 
 namespace YR.Common.DotNetCache
 {
     public class RedisCache:ICache
     {
+        private static Log Logger = LogFactory.GetLogger(typeof(RedisCache));
+
         private ConnectionMultiplexer redis=null;
 
         private IDatabase db=null;
@@ -19,6 +22,7 @@ namespace YR.Common.DotNetCache
         public RedisCache()
         {
             string configuration = ConfigHelper.GetAppSettings("redis_db");
+            Logger.Debug("redis_db:"+configuration);
             //redis = ConnectionMultiplexer.Connect("101.200.49.244:6379,ssl=false,password=redis#mengshi@2017");
             redis = ConnectionMultiplexer.Connect(configuration);
             db = redis.GetDatabase();

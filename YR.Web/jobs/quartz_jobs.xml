@@ -146,7 +146,7 @@
       </simple>
     </trigger>-->
 
-    <!--
+
     <job>
       <name>ReturnVehicleSendMessage_Job</name>
       <group>OrdersGroup</group>
@@ -167,7 +167,7 @@
         <repeat-count>-1</repeat-count>
         <repeat-interval>1800000</repeat-interval>
       </simple>
-    </trigger>-->
+    </trigger>
 
     <!--<job>
 		  <name>ReturnVehicleNotify_Job</name>

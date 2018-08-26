@@ -40,11 +40,14 @@ namespace YR.Web.api.app
             }
 
             string lowerCode = chkCode.ToLower();
-            ICache Cache = CacheFactory.GetCache();
+            ICache cache = CacheFactory.GetCache();
             string key = "login_code@" + mobile;
             DateTime dt = DateTime.Now.AddSeconds(120);
-            Cache.Set(key, lowerCode, dt - DateTime.Now);
-            Cache.Dispose();
+            cache.Set(key, lowerCode, dt - DateTime.Now);
+            if (cache != null)
+            {
+                cache.Dispose();
+            }
 
             //创建画布
             Bitmap bmp = new Bitmap(codeW, codeH);
@@ -93,10 +96,19 @@ namespace YR.Web.api.app
             }
             finally
             {
+
                 //显式释放资源 
-                Cache.Dispose();
+                if (cache != null)
+                {
+                    cache.Dispose();
+                }
+                //cache.Dispose();
                 bmp.Dispose();
                 g.Dispose();
+            }
+            if (cache != null)
+            {
+                cache.Dispose();
             }
         }
 

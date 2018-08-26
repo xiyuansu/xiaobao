@@ -175,8 +175,8 @@ namespace YR.Web.api.xacloud.service
                                 cacheValue = cache.Get<string>(cacheKey);
                                 if (string.IsNullOrEmpty(cacheValue) && latitude > 0 && longitude > 0)
                                 {
-                                    cacheKey = "ServiceArea_" + vehicle_ht["CITYID"].ToString();
-                                    string coordinates = cache.Get<string>(cacheKey);
+                                    string serviceAreaKey = "Service_Area_" + vehicle_ht["CITYID"].ToString();
+                                    string coordinates = cache.Get<string>(serviceAreaKey);
                                     if (string.IsNullOrEmpty(coordinates))
                                     {
                                         ServiceAreaManager areaManager = new ServiceAreaManager();
@@ -184,6 +184,11 @@ namespace YR.Web.api.xacloud.service
                                         if (area_ht != null && area_ht.Keys.Count > 0)
                                         {
                                             coordinates = SiteHelper.GetHashTableValueByKey(area_ht, "Coordinates");
+                                            if (!string.IsNullOrEmpty(coordinates))
+                                            {
+                                                DateTime timeSpan = DateTime.Now.AddDays(10);
+                                                cache.Set(serviceAreaKey, coordinates, timeSpan - DateTime.Now);
+                                            }
                                         }
                                     }
                                     List<LatLng> area_pts = new List<LatLng>();

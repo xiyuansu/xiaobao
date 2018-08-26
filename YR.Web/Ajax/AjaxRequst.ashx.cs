@@ -60,9 +60,10 @@ namespace YR.Web.Ajax
                         try
                         {
                             cache = CacheFactory.GetCache();
-                            string cacheKey = "ServiceArea_" + ht["CITYID"].ToString();
-                            cache.Set(cacheKey, context.Request["Coordinates"]);
-
+                            string cacheKey = "Service_Area_" + ht["CITYID"].ToString();
+                            DateTime timeSpan = DateTime.Now.AddDays(10);
+                            cache.Set(cacheKey, context.Request["Coordinates"], timeSpan - DateTime.Now);
+                            cache.Dispose();
                             List<LatLng> area_pts = new List<LatLng>();
                             string coordinates = cache.Get<string>(cacheKey);
                             if(coordinates!=null&& coordinates.Length>0)
@@ -72,8 +73,6 @@ namespace YR.Web.Ajax
                                 LatLng pt = new LatLng(double.Parse(pt_arr[1]), double.Parse(pt_arr[0]));
                                 area_pts.Add(pt);
                             }
-
-                            cache.Dispose();
                         }
                         catch (Exception e)
                         {
@@ -82,6 +81,10 @@ namespace YR.Web.Ajax
                                 cache.Dispose();
                             }
                             Logger.Error("更新区域:" + ht["THISNAME"].ToString() + "报错:" + e.Message);
+                        }
+                        if (cache != null)
+                        {
+                            cache.Dispose();
                         }
                     }
                     if (sam.AddOrEditInfo(ht, key))
