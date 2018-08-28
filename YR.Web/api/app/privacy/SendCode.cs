@@ -45,8 +45,8 @@ namespace YR.Web.api.app.privacy
             string code = res["LoginCode"].ToString().Trim();
             code = code.ToLower();
             ICache cache = CacheFactory.GetCache();
-            string key = "login_code@" + mobile;
-            string code_value = cache.Get<string>(key);
+            string loginCodeKey = "login_code_" + mobile;
+            string code_value = cache.Get<string>(loginCodeKey);
             Logger.Debug("mobile:" + mobile + ",code:" + code + ",redis_code_value:" + code_value);
             /*if(string.IsNullOrEmpty(code_value))
             {

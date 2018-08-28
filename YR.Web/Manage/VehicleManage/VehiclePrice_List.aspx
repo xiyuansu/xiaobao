@@ -56,7 +56,7 @@
                     <div style="text-align: right">
                         <uc1:LoadButton ID="LoadButton1" runat="server" />
                     </div>
-                    <div style="float: left;">
+                    <div>
                         <table class="tabCondition">
                             <tr>
                                 <th>城市</th>
@@ -69,9 +69,7 @@
                                     <select id="selModel" runat="server" style="width:94px">
                                     </select>
                                 </td>
-                            </tr>
-                            <tr style="text-align: center">
-                                <td colspan="10">
+                                <td>
                                     <asp:LinkButton ID="lbtSearch" runat="server" class="button green" OnClick="lbtSearch_Click">
                                         <span class="icon-botton" style="background: url('../../Themes/images/Search.png') no-repeat scroll 0px 4px;"></span>
                                         查 询

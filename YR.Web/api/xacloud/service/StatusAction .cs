@@ -11,7 +11,6 @@ using YR.Web.api.api_class;
 
 namespace YR.Web.api.xacloud.service
 {
-    //测试
     /// <summary>
     /// 状态信息
     /// {"distance":6315.7,"data":[{"acc":"1","wheel":"0","latitude":39.97863006591797,"locationType":0,"gpsTime":1498880904,"speed":0,"seat":"1","defend":"0","course":346,"power":"1","longitude":116.38182067871094}],"sign":"ae65f09315d08bf2011c64d8b86764eb","cmd":"status","time":1498880918082,"carId":"867717038875796"}
@@ -29,6 +28,7 @@ namespace YR.Web.api.xacloud.service
             ICache cache = null;
             try
             {
+                cache = CacheFactory.GetCache();
                 string jsonData = params_ht["json"].ToString();
                 dynamic jsonObj = DynamicJson.Parse(jsonData);
 
@@ -79,57 +79,6 @@ namespace YR.Web.api.xacloud.service
                             string vid = vehicle_ht["ID"].ToString();
                             //车辆使用状态 1空闲,2预约中,3客户使用中,4运维操作中
                             string useState = SiteHelper.GetHashTableValueByKey(vehicle_ht, "UseState");
-                            /*
-                            if (speed > 30)
-                            {
-                                Logger.Warn("超速报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
-                                VehicleAlarmManager alarmManager = new VehicleAlarmManager();
-                                Hashtable ht = new Hashtable();
-                                ht["ID"] = Guid.NewGuid().ToString();
-                                ht["VehicleID"] = vid;
-                                ht["IMEI"] = carId;
-                                ht["AlarmType"] = 6;
-                                ht["Speed"] = speed;
-                                ht["AlarmTime"] = DateTime.Now;
-                                ht["AlarmStatus"] = 0;
-                                ht["CreateTime"] = DateTime.Now;
-                                bool result = alarmManager.AddOrEdit(ht, null);
-                                if (result)
-                                {
-                                    Logger.Warn("超速报警记录添加成功," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
-                                }
-                                else
-                                {
-                                    Logger.Warn("超速报警记录添加失败," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
-                                }
-                            }
-                            else
-                            {
-                                if (speed > 5 && "1".Equals(useState))
-                                {
-                                    Logger.Warn("无单移动报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc+ ",useState="+ useState);
-                                    VehicleAlarmManager alarmManager = new VehicleAlarmManager();
-                                    Hashtable ht = new Hashtable();
-                                    ht["ID"] = Guid.NewGuid().ToString();
-                                    ht["VehicleID"] = vid;
-                                    ht["IMEI"] = carId;
-                                    ht["AlarmType"] = 1;
-                                    ht["Speed"] = speed;
-                                    ht["AlarmTime"] = DateTime.Now;
-                                    ht["AlarmStatus"] = 0;
-                                    ht["CreateTime"] = DateTime.Now;
-                                    bool result = alarmManager.AddOrEdit(ht, null);
-                                    if (result)
-                                    {
-                                        Logger.Warn("无单移动报警记录添加成功," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
-                                    }
-                                    else
-                                    {
-                                        Logger.Warn("无单移动报警记录添加失败," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
-                                    }
-                                }
-                            }*/
-
                             string strLastUpdateTime = SiteHelper.GetHashTableValueByKey(vehicle_ht, "LastUpdateTime");
                             int diffSecond = 5;
                             if (!string.IsNullOrEmpty(strLastUpdateTime))
@@ -168,11 +117,120 @@ namespace YR.Web.api.xacloud.service
                                 {
                                     result = vm.AddOrEditVehicleInfo(ht, vid);
                                 }
-
-                                string cacheKey = "Out_Area_" + carId;
-                                string cacheValue = "";
-                                cache = CacheFactory.GetCache();
-                                cacheValue = cache.Get<string>(cacheKey);
+                                string cacheValue;
+                                Hashtable htAlarm = new Hashtable();
+                                //超速
+                                if (speed > 30)
+                                {
+                                    int count = 1;
+                                    string overSpeedKey = "over_speed_" + carId;
+                                    cacheValue = cache.Get<string>(overSpeedKey);
+                                    if (string.IsNullOrEmpty(cacheValue))
+                                    {
+                                        DateTime dt = DateTime.Now.AddMinutes(5);
+                                        cache.Set(overSpeedKey, count + "," + dt.ToString("yyyy-MM-dd HH:mm:ss"), dt - DateTime.Now);
+                                    }
+                                    else
+                                    {
+                                        if (cacheValue.IndexOf(",") > 0)
+                                        {
+                                            string[] countValue = cacheValue.Split(',');
+                                            if (!string.IsNullOrEmpty(countValue[0]) && !string.IsNullOrEmpty(countValue[1]))
+                                            {
+                                                int.TryParse(countValue[0], out count);
+                                                count += 1;
+                                                if (count >= 10)
+                                                {
+                                                    Logger.Warn("超速报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
+                                                    VehicleAlarmManager alarmManager = new VehicleAlarmManager();
+                                                    htAlarm["ID"] = Guid.NewGuid().ToString();
+                                                    htAlarm["VehicleID"] = vid;
+                                                    htAlarm["IMEI"] = carId;
+                                                    htAlarm["AlarmType"] = 6;
+                                                    htAlarm["Speed"] = speed;
+                                                    htAlarm["AlarmTime"] = DateTime.Now;
+                                                    htAlarm["AlarmStatus"] = 0;
+                                                    htAlarm["CreateTime"] = DateTime.Now;
+                                                    if (alarmManager.AddOrEdit(htAlarm, null))
+                                                    {
+                                                        Logger.Warn("超速报警记录添加成功," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
+                                                    }
+                                                    else
+                                                    {
+                                                        Logger.Warn("超速报警记录添加失败," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    DateTime lastTime = Convert.ToDateTime(countValue[1]);
+                                                    TimeSpan timeSpan = lastTime - DateTime.Now;
+                                                    if (timeSpan.Seconds > 1)
+                                                    {
+                                                        cache.Set(overSpeedKey, count + "," + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), timeSpan);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (speed >= 5 && "1".Equals(useState))
+                                    {
+                                        int count = 1;
+                                        string moveKey = "no_order_move_" + carId;
+                                        cacheValue = cache.Get<string>(moveKey);
+                                        if (string.IsNullOrEmpty(cacheValue))
+                                        {
+                                            DateTime dt = DateTime.Now.AddMinutes(5);
+                                            cache.Set(moveKey, count + "," + dt.ToString("yyyy-MM-dd HH:mm:ss"), dt - DateTime.Now);
+                                        }
+                                        else
+                                        {
+                                            if (cacheValue.IndexOf(",") > 0)
+                                            {
+                                                string[] countValue = cacheValue.Split(',');
+                                                if (!string.IsNullOrEmpty(countValue[0]) && !string.IsNullOrEmpty(countValue[1]))
+                                                {
+                                                    int.TryParse(countValue[0], out count);
+                                                    count += 1;
+                                                    if (count >= 10)
+                                                    {
+                                                        Logger.Warn("无单移动报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc + ",useState=" + useState);
+                                                        VehicleAlarmManager alarmManager = new VehicleAlarmManager();
+                                                        htAlarm["ID"] = Guid.NewGuid().ToString();
+                                                        htAlarm["VehicleID"] = vid;
+                                                        htAlarm["IMEI"] = carId;
+                                                        htAlarm["AlarmType"] = 1;
+                                                        htAlarm["Speed"] = speed;
+                                                        htAlarm["AlarmTime"] = DateTime.Now;
+                                                        htAlarm["AlarmStatus"] = 0;
+                                                        htAlarm["CreateTime"] = DateTime.Now;
+                                                        if (alarmManager.AddOrEdit(htAlarm, null))
+                                                        {
+                                                            Logger.Warn("无单移动报警记录添加成功," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
+                                                        }
+                                                        else
+                                                        {
+                                                            Logger.Warn("无单移动报警记录添加失败," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    DateTime lastTime = Convert.ToDateTime(countValue[1]);
+                                                    TimeSpan timeSpan = lastTime - DateTime.Now;
+                                                    if (timeSpan.Seconds > 1)
+                                                    {
+                                                        cache.Set(moveKey, count + "," + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), timeSpan);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                string outAreaKey = "out_area_" + carId;
+                                cacheValue = cache.Get<string>(outAreaKey);
                                 if (string.IsNullOrEmpty(cacheValue) && latitude > 0 && longitude > 0)
                                 {
                                     string serviceAreaKey = "Service_Area_" + vehicle_ht["CITYID"].ToString();
@@ -209,7 +267,6 @@ namespace YR.Web.api.xacloud.service
                                         {
                                             Logger.Warn("越界报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
                                             VehicleAlarmManager alarmManager = new VehicleAlarmManager();
-                                            Hashtable htAlarm = new Hashtable();
                                             htAlarm["ID"] = Guid.NewGuid().ToString();
                                             htAlarm["VehicleID"] = vid;
                                             htAlarm["IMEI"] = carId;
@@ -221,10 +278,9 @@ namespace YR.Web.api.xacloud.service
                                             bool alarmResult = alarmManager.AddOrEdit(htAlarm, null);
                                             if (alarmResult)
                                             {
-                                                //越界10分钟内有效
-                                                DateTime dt = DateTime.Now.AddMinutes(10);
-                                                cache.Set(cacheKey, carId, dt - DateTime.Now);
-                                                cache.Dispose();
+                                                //越界20分钟内有效
+                                                DateTime dt = DateTime.Now.AddMinutes(20);
+                                                cache.Set(outAreaKey, carId, dt - DateTime.Now);
                                                 Logger.Warn("越界报警记录添加成功," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
                                             }
                                             else
@@ -233,11 +289,6 @@ namespace YR.Web.api.xacloud.service
                                             }
                                         }
                                     }
-                                }
-
-                                if (cache != null)
-                                {
-                                    cache.Dispose();
                                 }
                                 int end = DateTime.Now.Millisecond;
                                 Logger.Warn("小安盒子接口网关上报状态信息数据,耗时" + (end - start) + "ms," + vid + "," + carId + ",defend = " + defend + ",acc=" + acc + ",LockState=" + ht["LockState"]);
@@ -251,10 +302,15 @@ namespace YR.Web.api.xacloud.service
                         }
                     }
                 }
+                if (cache != null)
+                {
+                    cache.Dispose();
+                }
                 return resp;
             }
             catch (Exception e)
             {
+                Logger.Error("盒子上报状态信息报错:" + e);
                 string message = e.Message;
                 if (cache != null)
                 {

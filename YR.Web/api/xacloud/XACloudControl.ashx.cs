@@ -78,7 +78,7 @@ namespace YR.Web.api.xacloud
                 ApiResp result = new ApiResp();
                 result.Code = "-1";
                 result.Message = e.Message;
-                Logger.Error("小安盒子接口网关上报数据失败,访问ip:" + context.Request.UserHostAddress + ",参数:" + clientData + ",异常:" + e.Message);
+                Logger.Error("小安盒子接口网关上报数据失败,访问ip:" + context.Request.UserHostAddress + ",参数:" + clientData + ",异常:" + e);
                 context.Response.Write(JsonConvert.SerializeObject(result));
             }
         }

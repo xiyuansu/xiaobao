@@ -143,7 +143,7 @@ namespace YR.Web.api.app
                 string result = SiteHelper.GetJsonFromHashTable(null, "faild", "系统异常," + e.Message);
                 string encrypt_data = SiteHelper.Encrypt(result, EncryptionKey);
                 context.Response.Write(encrypt_data);
-                Logger.Error("API接口调用(失败),访问ip:" + context.Request.UserHostAddress + equipmentID + ",参数:" + requestData + ",异常:" + e.Message);
+                Logger.Error("API接口调用(失败),访问ip:" + context.Request.UserHostAddress + equipmentID + ",参数:" + requestData + ",异常:" + e);
             }
         }
 

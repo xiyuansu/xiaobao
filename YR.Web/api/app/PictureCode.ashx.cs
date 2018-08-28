@@ -41,13 +41,10 @@ namespace YR.Web.api.app
 
             string lowerCode = chkCode.ToLower();
             ICache cache = CacheFactory.GetCache();
-            string key = "login_code@" + mobile;
+            string loginCodeKey = "login_code_" + mobile;
             DateTime dt = DateTime.Now.AddSeconds(120);
-            cache.Set(key, lowerCode, dt - DateTime.Now);
-            if (cache != null)
-            {
-                cache.Dispose();
-            }
+            cache.Set(loginCodeKey, lowerCode, dt - DateTime.Now);
+            cache.Dispose();
 
             //创建画布
             Bitmap bmp = new Bitmap(codeW, codeH);

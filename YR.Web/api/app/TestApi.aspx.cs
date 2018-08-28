@@ -30,7 +30,45 @@ namespace YR.Web.api.app
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+            /*ICache cache = CacheFactory.GetCache();
+            int count = 1;
+            string overSpeedKey = "over_speed_" + "123456";
+            string cacheValue = "";
+            cacheValue = cache.Get<string>(overSpeedKey);
+            if (string.IsNullOrEmpty(cacheValue))
+            {
+                DateTime dt = DateTime.Now.AddMinutes(5);
+                cache.Set(overSpeedKey, count + "," + dt.ToString("yyyy-MM-dd HH:mm:ss"), dt - DateTime.Now);
+            }
+            else
+            {
+                if (cacheValue.IndexOf(",") > 0)
+                {
+                    string[] countValue = cacheValue.Split(',');
+                    if (!string.IsNullOrEmpty(countValue[0]) && !string.IsNullOrEmpty(countValue[1]))
+                    {
+                        int.TryParse(countValue[0], out count);
+                        count += 1;
+                        if (count >= 10)
+                        {
+
+                        }
+                        DateTime lastTime = Convert.ToDateTime(countValue[1]);
+                        TimeSpan timeSpan = lastTime - DateTime.Now;
+                        if (timeSpan.Seconds > 1)
+                        {
+                            cache.Set(overSpeedKey, count + "," + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), timeSpan);
+                        }
+                    }
+                }
+                else
+                {
+                    DateTime dt = DateTime.Now.AddMinutes(5);
+                    cache.Set(overSpeedKey, count + "," + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), dt - DateTime.Now);
+                }
+            }
+            cache.Dispose();*
+
             /*VehicleManager vm = new VehicleManager();
             bool isSuccess = vm.OpenVehicle("5f11db4f-7bab-4bf4-b546-7892141aecd6");
             Thread.Sleep(2000);

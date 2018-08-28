@@ -25,8 +25,8 @@ namespace YR.Web.api.xacloud.service
         public ApiResp Execute(System.Collections.Hashtable params_ht)
         {
             ApiResp resp = new ApiResp();
-            resp.Code ="0" ;
-            resp.Message ="success";
+            resp.Code = "0";
+            resp.Message = "success";
             string jsonData = params_ht["json"].ToString();
             ICache cache = null;
             try
@@ -42,21 +42,21 @@ namespace YR.Web.api.xacloud.service
                 {
                     alarm = jsonObj.alarm;
                 }
-                Logger.Debug("告警信息：" + carId + "，参数：" + jsonData);
-                /*
+                Logger.Warn("告警信息：" + carId + "，参数：" + jsonData);
+
                 VehicleManager vm = new VehicleManager();
                 VehicleAlarmManager alarmManager = new VehicleAlarmManager();
                 Hashtable vehicle_ht = vm.GetVehicleIByGPSNum(carId);
-                if (alarm == 6&& vehicle_ht != null && vehicle_ht.Keys.Count > 0)
+                if (alarm == 6 && vehicle_ht != null && vehicle_ht.Keys.Count > 0)
                 {
-                    string cacheKey = "Alarm_" + carId + "_" + alarm;
+                    string cacheKey = "alarm_" + carId + "_" + alarm;
                     cache = CacheFactory.GetCache();
                     if (!string.IsNullOrEmpty(cache.Get<string>(cacheKey)))
                     {
                         cache.Dispose();
-                        Logger.Error("告警信息20秒内，" + carId);
+                        Logger.Warn("断电告警10分钟内，" + carId);
                         resp.Code = "1";
-                        resp.Message = "20秒内过滤";
+                        resp.Message = "";
                         return resp;
                     }
                     int alarmType = 0;
@@ -71,6 +71,8 @@ namespace YR.Web.api.xacloud.service
                         alarmType = 2;
                     }
                     string vid = vehicle_ht["ID"].ToString();
+                    //车辆使用状态 1空闲,2预约中,3客户使用中,4运维操作中
+                    string useState = SiteHelper.GetHashTableValueByKey(vehicle_ht, "UseState");
                     Hashtable ht = new Hashtable();
                     ht["ID"] = Guid.NewGuid().ToString();
                     ht["VehicleID"] = vid;
@@ -81,19 +83,24 @@ namespace YR.Web.api.xacloud.service
                     ht["CreateTime"] = DateTime.Now;
 
                     bool result = false;
-                    if (ht.Keys.Count > 0)
+                    if (ht.Keys.Count > 0 && !"4".Equals(useState))
                     {
+                        Logger.Warn("告警信息,参数:" + jsonData + ",车辆状态:" + useState+ "(1空闲,2预约中,3客户使用中,4运维操作中)");
                         result = alarmManager.AddOrEdit(ht, null);
                         if (result)
                         {
-                            DateTime dt = DateTime.Now.AddSeconds(20);
+                            DateTime dt = DateTime.Now.AddMinutes(10);
                             cache.Set(cacheKey, carId, dt - DateTime.Now);
                             cache.Dispose();
                         }
                     }
                     resp.Code = result ? "0" : "1";
                     resp.Message = result ? "success" : "fail";
-                }*/
+                }
+                if (cache != null)
+                {
+                    cache.Dispose();
+                }
                 return resp;
             }
             catch (Exception e)
@@ -102,7 +109,7 @@ namespace YR.Web.api.xacloud.service
                 {
                     cache.Dispose();
                 }
-                Logger.Error("告警信息异常：" + e.Message + "，参数:" + jsonData);
+                Logger.Error("告警信息,参数:" + jsonData + ",异常:" + e);
                 resp.Code = "1";
                 resp.Message = e.Message;
                 return resp;

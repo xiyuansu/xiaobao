@@ -64,7 +64,7 @@ namespace YR.Web.Ajax
                             DateTime timeSpan = DateTime.Now.AddDays(10);
                             cache.Set(cacheKey, context.Request["Coordinates"], timeSpan - DateTime.Now);
                             cache.Dispose();
-                            List<LatLng> area_pts = new List<LatLng>();
+                            /*List<LatLng> area_pts = new List<LatLng>();
                             string coordinates = cache.Get<string>(cacheKey);
                             if(coordinates!=null&& coordinates.Length>0)
                             foreach (string str in coordinates.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
@@ -72,7 +72,7 @@ namespace YR.Web.Ajax
                                 string[] pt_arr = str.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                                 LatLng pt = new LatLng(double.Parse(pt_arr[1]), double.Parse(pt_arr[0]));
                                 area_pts.Add(pt);
-                            }
+                            }*/
                         }
                         catch (Exception e)
                         {
@@ -80,7 +80,7 @@ namespace YR.Web.Ajax
                             {
                                 cache.Dispose();
                             }
-                            Logger.Error("更新区域:" + ht["THISNAME"].ToString() + "报错:" + e.Message);
+                            Logger.Error("更新区域:" + ht["THISNAME"].ToString() + ",报错:" + e);
                         }
                         if (cache != null)
                         {

@@ -22,7 +22,7 @@ namespace YR.Common.DotNetCache
         public RedisCache()
         {
             string configuration = ConfigHelper.GetAppSettings("redis_db");
-            Logger.Debug("redis_db:"+configuration);
+            //Logger.Debug("redis_db:"+configuration);
             //redis = ConnectionMultiplexer.Connect("101.200.49.244:6379,ssl=false,password=redis#mengshi@2017");
             redis = ConnectionMultiplexer.Connect(configuration);
             db = redis.GetDatabase();
