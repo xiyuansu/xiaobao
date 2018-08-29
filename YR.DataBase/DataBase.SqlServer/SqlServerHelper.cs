@@ -189,7 +189,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
             }
             catch (Exception e)
             {
-                Logger.Error("-----------根据SQL返回影响行数-----------\r\n" + sql.ToString() + "\r\n" + e.Message + "\r\n");
+                Logger.Error("-----------根据SQL返回影响行数-----------\r\n" + sql.ToString() + "\r\n" + e + "\r\n");
                 return null;
             }
         }
@@ -232,7 +232,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
                     {
                         trans.Rollback();
                         num = -1;
-                        Logger.Error("-----------根据SQL执行,回滚事物-----------\r\n" + sql.ToString() + "\r\n" + e.Message + "\r\n返回值" + num + "\r\n");
+                        Logger.Error("-----------根据SQL执行,回滚事物-----------\r\n" + sql.ToString() + "\r\n" + e + "\r\n返回值" + num + "\r\n");
                     }
                     finally
                     {
@@ -242,7 +242,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
             }
             catch (Exception e)
             {
-                Logger.Error("-----------执行sql语句服务器连接失败-----------\r\n" + e.Message + "\r\n返回值" + num + "\r\n");
+                Logger.Error("-----------执行sql语句服务器连接失败-----------\r\n" + e + "\r\n返回值" + num + "\r\n");
             }
             return num;
         }
@@ -284,13 +284,13 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
                     {
                         num = -1;
                         transaction.Rollback();
-                        Logger.Error("-----------批量执行sql语句-----------\r\n" + sql_Log.ToString() + "\r\n" + exception.Message + "\r\n返回值" + num + "\r\n");
+                        Logger.Error("-----------批量执行sql语句-----------\r\n" + sql_Log.ToString() + "\r\n" + exception + "\r\n返回值" + num + "\r\n");
                     }
                 }
             }
             catch (Exception e)
             {
-                Logger.Error("-----------批量执行sql语句服务器连接失败-----------\r\n" + e.Message + "\r\n返回值" + num + "\r\n");
+                Logger.Error("-----------批量执行sql语句服务器连接失败-----------\r\n" + e + "\r\n返回值" + num + "\r\n");
             }
             return num;
         }
@@ -337,13 +337,13 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
                     {
                         num = -1;
                         transaction.Rollback();
-                        Logger.Error("-----------批量执行sql语句-----------\r\n" + sql_Log.ToString() + "\r\n" + exception.Message + "\r\n返回值" + num + "\r\n");
+                        Logger.Error("-----------批量执行sql语句-----------\r\n" + sql_Log.ToString() + "\r\n" + exception + "\r\n返回值" + num + "\r\n");
                     }
                 }
             }
             catch (Exception e)
             {
-                Logger.Error("-----------批量执行sql语句服务器连接失败-----------\r\n" + e.Message + "\r\n返回值" + num + "\r\n");
+                Logger.Error("-----------批量执行sql语句服务器连接失败-----------\r\n" + e + "\r\n返回值" + num + "\r\n");
             }
             if (num > 0)
             {
@@ -373,7 +373,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
             }
             catch (Exception e)
             {
-                Logger.Error("-----------获取数据集DataTable-----------\r\n" + sql.ToString() + "\r\n" + e.Message + "\r\n");
+                Logger.Error("-----------获取数据集DataTable-----------\r\n" + sql.ToString() + "\r\n" + e + "\r\n");
                 return null;
             }
         }
@@ -395,7 +395,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
             }
             catch (Exception e)
             {
-                Logger.Error("-----------获取数据集DataTable-----------\r\n" + sql.ToString() + "\r\n" + e.Message + "\r\n");
+                Logger.Error("-----------获取数据集DataTable-----------\r\n" + sql.ToString() + "\r\n" + e + "\r\n");
                 return null;
             }
         }
@@ -424,7 +424,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
             }
             catch (Exception e)
             {
-                Logger.Error("-----------获取数据集DataTable-----------\r\n" + sql.ToString() + "\r\n" + e.Message + "\r\n");
+                Logger.Error("-----------获取数据集DataTable-----------\r\n" + sql.ToString() + "\r\n" + e + "\r\n");
                 return null;
             }
         }
@@ -450,7 +450,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
             }
             catch (Exception e)
             {
-                Logger.Error("-----------执行一存储过程DataTable-----------\r\n" + procName.ToString() + "\r\n" + e.Message + "\r\n");
+                Logger.Error("-----------执行一存储过程DataTable-----------\r\n" + procName.ToString() + "\r\n" + e + "\r\n");
                 return null;
             }
         }
@@ -480,7 +480,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
             }
             catch (Exception e)
             {
-                Logger.Error("-----------执行一存储过程DataTable返回多个值-----------\r\n" + procName.ToString() + rs + "\r\n" + e.Message + "\r\n");
+                Logger.Error("-----------执行一存储过程DataTable返回多个值-----------\r\n" + procName.ToString() + rs + "\r\n" + e + "\r\n");
                 return null;
             }
         }
@@ -512,7 +512,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
             }
             catch (Exception e)
             {
-                Logger.Error("-----------获取数据集DataSet-----------\n" + sql.ToString() + "\n" + e.Message);
+                Logger.Error("-----------获取数据集DataSet-----------\n" + sql.ToString() + "\n" + e);
                 return null;
             }
         }
@@ -574,7 +574,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
                     catch (Exception exception)
                     {
                         transaction.Rollback();
-                        Logger.Error("-----------执行存储过程-----------\r\n" + procName + "\r\n" + exception.Message + "\r\n");
+                        Logger.Error("-----------执行存储过程-----------\r\n" + procName + "\r\n" + exception + "\r\n");
                     }
                     connection.Close();
                     return num;
@@ -582,7 +582,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
             }
             catch (Exception e)
             {
-                Logger.Error("-----------执行存储过程服务器连接失败-----------\r\n" + procName + "\r\n" + e.Message + "\r\n");
+                Logger.Error("-----------执行存储过程服务器连接失败-----------\r\n" + procName + "\r\n" + e + "\r\n");
             }
             return num;
         }
@@ -603,7 +603,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
                     }
                     catch (Exception exception)
                     {
-                        Logger.Error("-----------执行存储过程-----------\r\n" + procName + "\r\n" + exception.Message + "\r\n");
+                        Logger.Error("-----------执行存储过程-----------\r\n" + procName + "\r\n" + exception + "\r\n");
                     }
                     connection.Close();
                     return num;
@@ -611,7 +611,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
             }
             catch (Exception e)
             {
-                Logger.Error("-----------执行存储过程服务器连接失败-----------\r\n" + procName + "\r\n" + e.Message + "\r\n");
+                Logger.Error("-----------执行存储过程服务器连接失败-----------\r\n" + procName + "\r\n" + e + "\r\n");
             }
             return num;
         }
@@ -656,7 +656,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
             }
             catch (Exception exception)
             {
-                Logger.Error("-----------执行存储过程返回指定消息-----------\n" + procName + "\n" + exception.Message);
+                Logger.Error("-----------执行存储过程返回指定消息-----------\n" + procName + "\n" + exception);
             }
             return num;
         }
@@ -692,7 +692,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
             }
             catch (Exception exception)
             {
-                Logger.Error("-----------执行存储过程返回指定消息-----------\n" + procName + "\n" + exception.Message);
+                Logger.Error("-----------执行存储过程返回指定消息-----------\n" + procName + "\n" + exception);
             }
             return num;
 
@@ -912,7 +912,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
             }
             catch (Exception e)
             {
-                Logger.Error("-----------数据分页（Oracle）-----------\r\n" + sb.ToString() + "\r\n" + e.Message + "\r\n");
+                Logger.Error("-----------数据分页（Oracle）-----------\r\n" + sb.ToString() + "\r\n" + e + "\r\n");
                 return null; ;
             }
         }
@@ -966,7 +966,7 @@ namespace PDA_Service.DataBase.DataBase.SqlServer
             }
             catch (Exception e)
             {
-                Logger.Error("-----------批量执行sql语句返回单个值-----------\r\n" + sql.ToString() + "\r\n" + e.Message + "\r\n");
+                Logger.Error("-----------批量执行sql语句返回单个值-----------\r\n" + sql.ToString() + "\r\n" + e + "\r\n");
                 return null;
             }
         }
