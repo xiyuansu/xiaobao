@@ -12,7 +12,7 @@ using YR.Web.api.api_class;
 namespace YR.Web.api.xacloud.service
 {
     /// <summary>
-    /// 状态信息
+    /// 状态信息 over_speed_866100036658293
     /// {"distance":6315.7,"data":[{"acc":"1","wheel":"0","latitude":39.97863006591797,"locationType":0,"gpsTime":1498880904,"speed":0,"seat":"1","defend":"0","course":346,"power":"1","longitude":116.38182067871094}],"sign":"ae65f09315d08bf2011c64d8b86764eb","cmd":"status","time":1498880918082,"carId":"867717038875796"}
     /// </summary>
     public class StatusAction : IApiAction
@@ -141,6 +141,7 @@ namespace YR.Web.api.xacloud.service
                                                 count += 1;
                                                 if (count >= 10)
                                                 {
+                                                    cache.Remove(overSpeedKey);
                                                     Logger.Warn("超速报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
                                                     VehicleAlarmManager alarmManager = new VehicleAlarmManager();
                                                     htAlarm["ID"] = Guid.NewGuid().ToString();
@@ -164,9 +165,9 @@ namespace YR.Web.api.xacloud.service
                                                 {
                                                     DateTime lastTime = Convert.ToDateTime(countValue[1]);
                                                     TimeSpan timeSpan = lastTime - DateTime.Now;
-                                                    if (timeSpan.Seconds > 1)
+                                                    if (timeSpan.TotalSeconds > 1)
                                                     {
-                                                        cache.Set(overSpeedKey, count + "," + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), timeSpan);
+                                                        cache.Set(overSpeedKey, count + "," + countValue[1], timeSpan);
                                                     }
                                                 }
                                             }
@@ -196,6 +197,7 @@ namespace YR.Web.api.xacloud.service
                                                     count += 1;
                                                     if (count >= 10)
                                                     {
+                                                        cache.Remove(moveKey);
                                                         Logger.Warn("无单移动报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc + ",useState=" + useState);
                                                         VehicleAlarmManager alarmManager = new VehicleAlarmManager();
                                                         htAlarm["ID"] = Guid.NewGuid().ToString();
@@ -220,9 +222,9 @@ namespace YR.Web.api.xacloud.service
                                                 {
                                                     DateTime lastTime = Convert.ToDateTime(countValue[1]);
                                                     TimeSpan timeSpan = lastTime - DateTime.Now;
-                                                    if (timeSpan.Seconds > 1)
+                                                    if (timeSpan.TotalSeconds > 1)
                                                     {
-                                                        cache.Set(moveKey, count + "," + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), timeSpan);
+                                                        cache.Set(moveKey, count + "," + countValue[1], timeSpan);
                                                     }
                                                 }
                                             }
