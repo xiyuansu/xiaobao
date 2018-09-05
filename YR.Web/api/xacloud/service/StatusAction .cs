@@ -117,31 +117,29 @@ namespace YR.Web.api.xacloud.service
                                 {
                                     result = vm.AddOrEditVehicleInfo(ht, vid);
                                 }
-                                string cacheValue;
                                 Hashtable htAlarm = new Hashtable();
                                 //超速
                                 if (speed > 30)
                                 {
                                     int count = 1;
                                     string overSpeedKey = "over_speed_" + carId;
-                                    cacheValue = cache.Get<string>(overSpeedKey);
-                                    if (string.IsNullOrEmpty(cacheValue))
+                                    string overSpeedValue = cache.Get<string>(overSpeedKey);
+                                    if (string.IsNullOrEmpty(overSpeedValue))
                                     {
                                         DateTime dt = DateTime.Now.AddMinutes(5);
                                         cache.Set(overSpeedKey, count + "," + dt.ToString("yyyy-MM-dd HH:mm:ss"), dt - DateTime.Now);
                                     }
                                     else
                                     {
-                                        if (cacheValue.IndexOf(",") > 0)
+                                        if (overSpeedValue.IndexOf(",") > 0)
                                         {
-                                            string[] countValue = cacheValue.Split(',');
+                                            string[] countValue = overSpeedValue.Split(',');
                                             if (!string.IsNullOrEmpty(countValue[0]) && !string.IsNullOrEmpty(countValue[1]))
                                             {
                                                 int.TryParse(countValue[0], out count);
                                                 count += 1;
-                                                if (count >= 10)
+                                                if (count >= 5)
                                                 {
-                                                    cache.Remove(overSpeedKey);
                                                     Logger.Warn("超速报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
                                                     VehicleAlarmManager alarmManager = new VehicleAlarmManager();
                                                     htAlarm["ID"] = Guid.NewGuid().ToString();
@@ -154,6 +152,7 @@ namespace YR.Web.api.xacloud.service
                                                     htAlarm["CreateTime"] = DateTime.Now;
                                                     if (alarmManager.AddOrEdit(htAlarm, null))
                                                     {
+                                                        cache.Set(overSpeedKey, "");
                                                         Logger.Warn("超速报警记录添加成功," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
                                                     }
                                                     else
@@ -180,24 +179,23 @@ namespace YR.Web.api.xacloud.service
                                     {
                                         int count = 1;
                                         string moveKey = "no_order_move_" + carId;
-                                        cacheValue = cache.Get<string>(moveKey);
-                                        if (string.IsNullOrEmpty(cacheValue))
+                                        string moveValue = cache.Get<string>(moveKey);
+                                        if (string.IsNullOrEmpty(moveValue))
                                         {
                                             DateTime dt = DateTime.Now.AddMinutes(5);
                                             cache.Set(moveKey, count + "," + dt.ToString("yyyy-MM-dd HH:mm:ss"), dt - DateTime.Now);
                                         }
                                         else
                                         {
-                                            if (cacheValue.IndexOf(",") > 0)
+                                            if (moveValue.IndexOf(",") > 0)
                                             {
-                                                string[] countValue = cacheValue.Split(',');
+                                                string[] countValue = moveValue.Split(',');
                                                 if (!string.IsNullOrEmpty(countValue[0]) && !string.IsNullOrEmpty(countValue[1]))
                                                 {
                                                     int.TryParse(countValue[0], out count);
                                                     count += 1;
                                                     if (count >= 10)
                                                     {
-                                                        cache.Remove(moveKey);
                                                         Logger.Warn("无单移动报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc + ",useState=" + useState);
                                                         VehicleAlarmManager alarmManager = new VehicleAlarmManager();
                                                         htAlarm["ID"] = Guid.NewGuid().ToString();
@@ -210,6 +208,7 @@ namespace YR.Web.api.xacloud.service
                                                         htAlarm["CreateTime"] = DateTime.Now;
                                                         if (alarmManager.AddOrEdit(htAlarm, null))
                                                         {
+                                                            cache.Set(moveKey, "");
                                                             Logger.Warn("无单移动报警记录添加成功," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
                                                         }
                                                         else
@@ -232,8 +231,8 @@ namespace YR.Web.api.xacloud.service
                                     }
                                 }
                                 string outAreaKey = "out_area_" + carId;
-                                cacheValue = cache.Get<string>(outAreaKey);
-                                if (string.IsNullOrEmpty(cacheValue) && latitude > 0 && longitude > 0)
+                                string outAreaValue = cache.Get<string>(outAreaKey);
+                                if (string.IsNullOrEmpty(outAreaValue) && latitude > 0 && longitude > 0)
                                 {
                                     string serviceAreaKey = "Service_Area_" + vehicle_ht["CITYID"].ToString();
                                     string coordinates = cache.Get<string>(serviceAreaKey);
