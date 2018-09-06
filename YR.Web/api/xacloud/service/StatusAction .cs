@@ -121,55 +121,29 @@ namespace YR.Web.api.xacloud.service
                                 //超速
                                 if (speed > 30)
                                 {
-                                    int count = 1;
                                     string overSpeedKey = "over_speed_" + carId;
                                     string overSpeedValue = cache.Get<string>(overSpeedKey);
                                     if (string.IsNullOrEmpty(overSpeedValue))
                                     {
-                                        DateTime dt = DateTime.Now.AddMinutes(5);
-                                        cache.Set(overSpeedKey, count + "," + dt.ToString("yyyy-MM-dd HH:mm:ss"), dt - DateTime.Now);
-                                    }
-                                    else
-                                    {
-                                        if (overSpeedValue.IndexOf(",") > 0)
+                                        Logger.Warn("超速报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
+                                        VehicleAlarmManager alarmManager = new VehicleAlarmManager();
+                                        htAlarm["ID"] = Guid.NewGuid().ToString();
+                                        htAlarm["VehicleID"] = vid;
+                                        htAlarm["IMEI"] = carId;
+                                        htAlarm["AlarmType"] = 6;
+                                        htAlarm["Speed"] = speed;
+                                        htAlarm["AlarmTime"] = DateTime.Now;
+                                        htAlarm["AlarmStatus"] = 0;
+                                        htAlarm["CreateTime"] = DateTime.Now;
+                                        if (alarmManager.AddOrEdit(htAlarm, null))
                                         {
-                                            string[] countValue = overSpeedValue.Split(',');
-                                            if (!string.IsNullOrEmpty(countValue[0]) && !string.IsNullOrEmpty(countValue[1]))
-                                            {
-                                                int.TryParse(countValue[0], out count);
-                                                count += 1;
-                                                if (count >= 5)
-                                                {
-                                                    Logger.Warn("超速报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
-                                                    VehicleAlarmManager alarmManager = new VehicleAlarmManager();
-                                                    htAlarm["ID"] = Guid.NewGuid().ToString();
-                                                    htAlarm["VehicleID"] = vid;
-                                                    htAlarm["IMEI"] = carId;
-                                                    htAlarm["AlarmType"] = 6;
-                                                    htAlarm["Speed"] = speed;
-                                                    htAlarm["AlarmTime"] = DateTime.Now;
-                                                    htAlarm["AlarmStatus"] = 0;
-                                                    htAlarm["CreateTime"] = DateTime.Now;
-                                                    if (alarmManager.AddOrEdit(htAlarm, null))
-                                                    {
-                                                        cache.Set(overSpeedKey, "");
-                                                        Logger.Warn("超速报警记录添加成功," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
-                                                    }
-                                                    else
-                                                    {
-                                                        Logger.Warn("超速报警记录添加失败," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    DateTime lastTime = Convert.ToDateTime(countValue[1]);
-                                                    TimeSpan timeSpan = lastTime - DateTime.Now;
-                                                    if (timeSpan.TotalSeconds > 1)
-                                                    {
-                                                        cache.Set(overSpeedKey, count + "," + countValue[1], timeSpan);
-                                                    }
-                                                }
-                                            }
+                                            DateTime timeSpan = DateTime.Now.AddMinutes(1);
+                                            cache.Set(overSpeedKey, 1, timeSpan - DateTime.Now);
+                                            Logger.Warn("超速报警记录添加成功," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
+                                        }
+                                        else
+                                        {
+                                            Logger.Warn("超速报警记录添加失败," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
                                         }
                                     }
                                 }
@@ -177,56 +151,23 @@ namespace YR.Web.api.xacloud.service
                                 {
                                     if (speed >= 5 && "1".Equals(useState))
                                     {
-                                        int count = 1;
-                                        string moveKey = "no_order_move_" + carId;
-                                        string moveValue = cache.Get<string>(moveKey);
-                                        if (string.IsNullOrEmpty(moveValue))
+                                        Logger.Warn("无单移动报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc + ",useState=" + useState);
+                                        VehicleAlarmManager alarmManager = new VehicleAlarmManager();
+                                        htAlarm["ID"] = Guid.NewGuid().ToString();
+                                        htAlarm["VehicleID"] = vid;
+                                        htAlarm["IMEI"] = carId;
+                                        htAlarm["AlarmType"] = 1;
+                                        htAlarm["Speed"] = speed;
+                                        htAlarm["AlarmTime"] = DateTime.Now;
+                                        htAlarm["AlarmStatus"] = 0;
+                                        htAlarm["CreateTime"] = DateTime.Now;
+                                        if (alarmManager.AddOrEdit(htAlarm, null))
                                         {
-                                            DateTime dt = DateTime.Now.AddMinutes(5);
-                                            cache.Set(moveKey, count + "," + dt.ToString("yyyy-MM-dd HH:mm:ss"), dt - DateTime.Now);
+                                            Logger.Warn("无单移动报警记录添加成功," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
                                         }
                                         else
                                         {
-                                            if (moveValue.IndexOf(",") > 0)
-                                            {
-                                                string[] countValue = moveValue.Split(',');
-                                                if (!string.IsNullOrEmpty(countValue[0]) && !string.IsNullOrEmpty(countValue[1]))
-                                                {
-                                                    int.TryParse(countValue[0], out count);
-                                                    count += 1;
-                                                    if (count >= 10)
-                                                    {
-                                                        Logger.Warn("无单移动报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc + ",useState=" + useState);
-                                                        VehicleAlarmManager alarmManager = new VehicleAlarmManager();
-                                                        htAlarm["ID"] = Guid.NewGuid().ToString();
-                                                        htAlarm["VehicleID"] = vid;
-                                                        htAlarm["IMEI"] = carId;
-                                                        htAlarm["AlarmType"] = 1;
-                                                        htAlarm["Speed"] = speed;
-                                                        htAlarm["AlarmTime"] = DateTime.Now;
-                                                        htAlarm["AlarmStatus"] = 0;
-                                                        htAlarm["CreateTime"] = DateTime.Now;
-                                                        if (alarmManager.AddOrEdit(htAlarm, null))
-                                                        {
-                                                            cache.Set(moveKey, "");
-                                                            Logger.Warn("无单移动报警记录添加成功," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
-                                                        }
-                                                        else
-                                                        {
-                                                            Logger.Warn("无单移动报警记录添加失败," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    DateTime lastTime = Convert.ToDateTime(countValue[1]);
-                                                    TimeSpan timeSpan = lastTime - DateTime.Now;
-                                                    if (timeSpan.TotalSeconds > 1)
-                                                    {
-                                                        cache.Set(moveKey, count + "," + countValue[1], timeSpan);
-                                                    }
-                                                }
-                                            }
+                                            Logger.Warn("无单移动报警记录添加失败," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
                                         }
                                     }
                                 }
