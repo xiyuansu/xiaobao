@@ -151,23 +151,30 @@ namespace YR.Web.api.xacloud.service
                                 {
                                     if (speed >= 5 && "1".Equals(useState))
                                     {
-                                        Logger.Warn("无单移动报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc + ",useState=" + useState);
-                                        VehicleAlarmManager alarmManager = new VehicleAlarmManager();
-                                        htAlarm["ID"] = Guid.NewGuid().ToString();
-                                        htAlarm["VehicleID"] = vid;
-                                        htAlarm["IMEI"] = carId;
-                                        htAlarm["AlarmType"] = 1;
-                                        htAlarm["Speed"] = speed;
-                                        htAlarm["AlarmTime"] = DateTime.Now;
-                                        htAlarm["AlarmStatus"] = 0;
-                                        htAlarm["CreateTime"] = DateTime.Now;
-                                        if (alarmManager.AddOrEdit(htAlarm, null))
+                                        string moveKey = "move_" + carId;
+                                        string moveValue = cache.Get<string>(moveKey);
+                                        if (string.IsNullOrEmpty(moveValue))
                                         {
-                                            Logger.Warn("无单移动报警记录添加成功," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
-                                        }
-                                        else
-                                        {
-                                            Logger.Warn("无单移动报警记录添加失败," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
+                                            Logger.Warn("无单移动报警," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc + ",useState=" + useState);
+                                            VehicleAlarmManager alarmManager = new VehicleAlarmManager();
+                                            htAlarm["ID"] = Guid.NewGuid().ToString();
+                                            htAlarm["VehicleID"] = vid;
+                                            htAlarm["IMEI"] = carId;
+                                            htAlarm["AlarmType"] = 1;
+                                            htAlarm["Speed"] = speed;
+                                            htAlarm["AlarmTime"] = DateTime.Now;
+                                            htAlarm["AlarmStatus"] = 0;
+                                            htAlarm["CreateTime"] = DateTime.Now;
+                                            if (alarmManager.AddOrEdit(htAlarm, null))
+                                            {
+                                                DateTime timeSpan = DateTime.Now.AddMinutes(10);
+                                                cache.Set(moveKey, 1, timeSpan - DateTime.Now);
+                                                Logger.Warn("无单移动报警记录添加成功," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
+                                            }
+                                            else
+                                            {
+                                                Logger.Warn("无单移动报警记录添加失败," + vid + "," + carId + ",speed=" + speed + ",defend =" + defend + ",acc=" + acc);
+                                            }
                                         }
                                     }
                                 }
