@@ -19,7 +19,7 @@ using System.IO;
 using Deepleo.Weixin.SDK.Pay;
 using YR.Common.DotNetCode;
 using YR.Common.DotNetLog;
-
+using System.Xml;
 
 namespace YR.Web.api.app.pay.wxpay
 {
@@ -115,7 +115,8 @@ namespace YR.Web.api.app.pay.wxpay
         private Dictionary<string, string> GetRequestPostByXml(string xmlString)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
-            System.Xml.XmlDocument document = new System.Xml.XmlDocument();
+            XmlDocument document = new XmlDocument();
+            document.XmlResolver = null;
             document.LoadXml(xmlString);
 
             var nodes = document.ChildNodes[0].ChildNodes;
