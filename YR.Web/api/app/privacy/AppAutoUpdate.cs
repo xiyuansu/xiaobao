@@ -21,6 +21,7 @@ namespace YR.Web.api.app.privacy
 
             string xmlfile = HttpContext.Current.Server.MapPath("/app/app_ver.xml");
             XmlDocument xml = new XmlDocument();
+            xml.XmlResolver = null;
             xml.Load(xmlfile);
             Hashtable appversion = new Hashtable();
             if (res["Client"] != null && "iOS" == res["Client"].ToString())

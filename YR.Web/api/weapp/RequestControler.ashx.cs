@@ -113,6 +113,7 @@ namespace YR.Web.api.weapp
 
             string xmlfile = HttpContext.Current.Server.MapPath("/api/weapp/acl.xml");
             XmlDocument xml = new XmlDocument();
+            xml.XmlResolver = null;
             xml.Load(xmlfile);
 
             XmlNodeList nodeList = xml.SelectNodes("/list/app");

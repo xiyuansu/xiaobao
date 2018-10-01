@@ -185,6 +185,7 @@ namespace Asiasofti.SmartVehicle.Manager
 
                 XmlNodeList xxAddress = null;
                 XmlDocument xx = new XmlDocument();
+                xx.XmlResolver = null;
                 xx.LoadXml(result);
                 XmlNodeList xxList = xx.GetElementsByTagName("addressComponent");
                 xxAddress = xx.GetElementsByTagName("formatted_address");

@@ -116,6 +116,7 @@ namespace YR.Web.api.weapp.pay.wxpay
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
             System.Xml.XmlDocument document = new System.Xml.XmlDocument();
+            document.XmlResolver = null;
             document.LoadXml(xmlString);
 
             var nodes = document.ChildNodes[0].ChildNodes;

@@ -29,6 +29,7 @@ namespace YR.Web.api.operations.privacy
 
             string xmlfile = HttpContext.Current.Server.MapPath("/app/operations/app_ver.xml");
             XmlDocument xml = new XmlDocument();
+            xml.XmlResolver = null;
             xml.Load(xmlfile);
 
             XmlNode node_android = xml.SelectSingleNode("/ver/android");

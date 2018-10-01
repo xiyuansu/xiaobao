@@ -29,6 +29,7 @@ namespace YR.Web.YRBase.SysConfig
         {
             string returnValue = "";
             XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.XmlResolver = null;
             xmlDocument.Load(Server.MapPath("/App_Code/Config.xml"));
             XmlNodeList xmlNodeList = xmlDocument.SelectNodes("//appSettings/add");
             foreach (XmlNode xmlNode in xmlNodeList)

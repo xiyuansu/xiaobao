@@ -39,6 +39,7 @@ namespace YR.Common.DotNetConfig
             path = GetConfigFile(host);
             string value = "";
             XmlDocument xml = new XmlDocument();
+            xml.XmlResolver = null;
             xml.Load(path);
             XmlNode node = xml.SelectSingleNode(string.Format("/appSettings/add[@key='{0}']", key));
             if (node != null)
@@ -56,6 +57,7 @@ namespace YR.Common.DotNetConfig
 
             string value = "";
             XmlDocument xml = new XmlDocument();
+            xml.XmlResolver = null;
             xml.Load(path);
             XmlNode node = xml.SelectSingleNode(string.Format("/appSettings/add[@key='{0}']", key));
             if (node != null)
@@ -96,6 +98,7 @@ namespace YR.Common.DotNetConfig
 
             string xmlfile = ConfigurationManager.AppSettings["SaaSConfig"].ToString().Trim();
             XmlDocument xml = new XmlDocument();
+            xml.XmlResolver = null;
             xml.Load(xmlfile);
 
             XmlNode node = xml.SelectSingleNode(string.Format("/list/item[@entry='{0}']",entry));
@@ -117,6 +120,7 @@ namespace YR.Common.DotNetConfig
 
             string xmlfile = ConfigurationManager.AppSettings["SaaSConfig"].ToString().Trim();
             XmlDocument xml = new XmlDocument();
+            xml.XmlResolver = null;
             xml.Load(xmlfile);
 
             XmlNodeList nodeList = xml.SelectNodes("/list/item");

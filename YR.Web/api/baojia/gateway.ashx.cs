@@ -153,6 +153,7 @@ namespace YR.Web.api.baojia
 
             string xmlfile = HttpContext.Current.Server.MapPath("/api/baojia/acl.xml");
             XmlDocument xml = new XmlDocument();
+            xml.XmlResolver = null;
             xml.Load(xmlfile);
 
             XmlNodeList nodeList = xml.SelectNodes("/list/app");
