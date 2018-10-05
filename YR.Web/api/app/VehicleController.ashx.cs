@@ -80,7 +80,7 @@ namespace YR.Web.api.app
                 {
                     case "GetVehicles":
                         GetVehicles(context);
-                        break; 
+                        break;
                     case "GetCupInfo":
                         GetCupInfo(context);
                         break;
@@ -134,7 +134,7 @@ namespace YR.Web.api.app
             const int GB_DIV = 1024 * 1024 * 1024;
             double cpu = Math.Round(sys.CpuLoad, 2);
             decimal memory = Math.Round((decimal)(sys.PhysicalMemory - sys.MemoryAvailable) / sys.PhysicalMemory, 2) * 100;
-            string useInfo = string.Format("系统CPU使用率：{0}%，系统内存使用大小：{1}GB，{2}%", Math.Round(sys.CpuLoad, 2), Math.Round((sys.PhysicalMemory - sys.MemoryAvailable) / (double)GB_DIV, 2),memory);
+            string useInfo = string.Format("系统CPU使用率：{0}%，系统内存使用大小：{1}GB，{2}%", Math.Round(sys.CpuLoad, 2), Math.Round((sys.PhysicalMemory - sys.MemoryAvailable) / (double)GB_DIV, 2), memory);
             ApiResp resp = new ApiResp();
             resp.Code = "0";
             resp.Message = useInfo;
@@ -270,12 +270,12 @@ namespace YR.Web.api.app
                         {
                             vehicle["ADDRESS"] = SiteHelper.GetLocationByGPS(vehicle["LONGITUDE"].ToString(), vehicle["LATITUDE"].ToString());
                         }*/
-                        LatLng latlng=new LatLng(double.Parse(lat),double.Parse(lng));
+                        LatLng latlng = new LatLng(double.Parse(lat), double.Parse(lng));
                         latlng = SiteHelper.TransformFromWGSToGCJ(latlng);
-                        vehicle["LATITUDE"]=latlng.latitude;
+                        vehicle["LATITUDE"] = latlng.latitude;
                         vehicle["LONGITUDE"] = latlng.longitude;
                     }
-                    
+
 
                     decimal electricity = 0;
                     decimal.TryParse(vehicle["ELECTRICITY"].ToString(), out electricity);
@@ -397,9 +397,13 @@ namespace YR.Web.api.app
                 begin = null;
                 end = null;
             }
-            
+
             VehicleManager vm = new VehicleManager();
             DataTable traces = vm.GetVehicleTrace(vehicleid, orderid, begin, end);
+            if (traces == null || traces.Rows.Count == 0)
+            {
+                traces = vm.GetVehicleLastTrace(vehicleid);
+            }
             if (traces != null && traces.Rows.Count > 0)
             {
                 traces.Columns.Remove("ID");
@@ -488,7 +492,7 @@ namespace YR.Web.api.app
             resp.Code = "-1";
             resp.Message = "";
 
-            string cityID= "";
+            string cityID = "";
             cityID = context.Request["cityID"].ToString().Trim();
 
             ServiceAreaManager areaManager = new ServiceAreaManager();
@@ -511,7 +515,7 @@ namespace YR.Web.api.app
             resp.Code = "-1";
             resp.Message = "";
 
-            string vehicleID= context.Request["vehicleID"].ToString().Trim();
+            string vehicleID = context.Request["vehicleID"].ToString().Trim();
 
             ServiceAreaManager areaManager = new ServiceAreaManager();
             DataTable dt = areaManager.GetServiceAreaListByID(vehicleID);

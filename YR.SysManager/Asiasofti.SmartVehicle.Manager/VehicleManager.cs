@@ -420,6 +420,16 @@ namespace Asiasofti.SmartVehicle.Manager
             return dt;
         }
 
+        public DataTable GetVehicleLastTrace(string vehicleid)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"select * from (select top 1000 *,dbo.TransformFromWGSToGCJ_LNG([Latitude],[Longitude]) 'AMAP_longitude',dbo.TransformFromWGSToGCJ_LAT([Latitude],[Longitude]) 'AMAP_latitude' from YR_VehicleTrace where Latitude is not null and Longitude is not null");
+            strSql.Append(string.Format(" and VehicleID='{0}' ", vehicleid));
+            strSql.Append(" order by RecordTime desc) t order by RecordTime asc ");
+            DataTable dt = DataFactory.SqlDataBase().GetDataTableBySQL(strSql);
+            return dt;
+        }
+
         /// <summary>
         /// 获取车辆速度行驶轨迹
         /// </summary>
