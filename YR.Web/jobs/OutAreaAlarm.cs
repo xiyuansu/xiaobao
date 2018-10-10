@@ -69,7 +69,7 @@ namespace YR.Web.jobs
                                                     if (sendResult)
                                                     {
                                                         Logger.Warn(string.Format("车辆{0}，{1}发生{2}报警，发送给{3}成功。", name, gpsNum, type, mobile));
-                                                        DateTime dt = DateTime.Now.AddHours(1);
+                                                        DateTime dt = DateTime.Now.AddMinutes(20);
                                                         cache.Set(key, 1, dt - DateTime.Now);
                                                     }
                                                     else
